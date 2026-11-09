@@ -222,7 +222,19 @@
             <thead><tr>
               <th class="table-header-cell"><button type="button" id="sortNameBtn" class="inline-flex items-center gap-2 hover:text-primary transition" aria-label="Sort by event name">EVENT NAME <span id="sortNameIcon" class="text-primary">↕</span></button></th>
               <th class="table-header-cell"><button type="button" id="sortDateBtn" class="inline-flex items-center gap-2 hover:text-primary transition" aria-label="Sort by date">DATE <span id="sortDateIcon" class="text-primary">↓</span></button></th>
-              <th class="table-header-cell">Status</th>
+              <th class="table-header-cell">
+  <button type="button" id="sortStatusBtn"
+    class="inline-flex items-center gap-2 hover:text-primary transition">
+    STATUS <span id="sortStatusIcon" class="text-primary">↕</span>
+  </button>
+</th>
+
+<th class="table-header-cell">
+  <button type="button" id="sortCountBtn"
+    class="inline-flex items-center gap-2 hover:text-primary transition">
+    PHOTO SUMMARY <span id="sortCountIcon" class="text-primary">↕</span>
+  </button>
+</th>
               <th class="table-header-cell">Photo Summary</th>
               <th class="table-header-cell">JSON Database</th>
               <th class="table-header-cell text-right">Actions</th>
@@ -323,7 +335,7 @@
       photoFinder: "./blinkr_client.html",
     };
     // BLINKR WHATSAPP CONFIGURATION
-    const BLINKR_WHATSAPP_NUMBER = "6285759063832";
+    const BLINKR_WHATSAPP_NUMBER = "";
 
     document.querySelectorAll('.btn-route').forEach(button => {
       button.addEventListener('click', (e) => {
@@ -656,7 +668,8 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
       const ev = userEventsById[eventId];
       if (!ev || ev.status !== "Selesai") return alert("Foto hanya bisa ditambah setelah event selesai.");
       appendSelectedEventId = eventId;
-      document.getElementById("appendEventTitle").textContent = `${ev.event_name || "Event"} · ${ev.event_date || "-"}`;
+      document.getElementById("appendEventTitle").textContent =
+  `${ev.event_name || "Event"} · ${formatDateDisplay(ev.event_date)}`;
       const folderSelect = document.getElementById("appendExistingFolder");
       const previousBatchFolders = (appendTasksByParent[eventId] || []).map(b => b.gdrive_folder_id).filter(Boolean);
       const folderIds = [...new Set([ev.gdrive_folder_id, ...previousBatchFolders].filter(Boolean))];
@@ -744,6 +757,32 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
       if (date.getFullYear() !== Number(match[1]) || date.getMonth() !== Number(match[2]) - 1 || date.getDate() !== Number(match[3])) return null;
       return date;
     }
+    function formatDateDisplay(value) {
+  const match = String(value || "").match(
+    /^(\d{4})-(\d{2})-(\d{2})$/
+  );
+
+  if (!match) return value || "-";
+
+  const [, year, month, day] = match;
+
+  const date = new Date(
+    Number(year),
+    Number(month) - 1,
+    Number(day)
+  );
+
+  // Pastikan tanggal valid
+  if (
+    date.getFullYear() !== Number(year) ||
+    date.getMonth() !== Number(month) - 1 ||
+    date.getDate() !== Number(day)
+  ) {
+    return value;
+  }
+
+  return `${day}-${month}-${year}`;
+}
 
     function getWeekStart(date) {
       const result = new Date(date);
@@ -767,27 +806,84 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
     }
 
     function compareEvents(a, b, mode) {
-      if (mode === "name-asc" || mode === "name-desc") {
-        const result = String(a.event_name || "").localeCompare(String(b.event_name || ""), "id", { sensitivity: "base" });
-        return mode === "name-asc" ? result : -result;
-      }
+  // Sort berdasarkan nama event
+  if (mode === "name-asc" || mode === "name-desc") {
+    const result = String(a.event_name || "").localeCompare(
+      String(b.event_name || ""),
+      "id",
+      { sensitivity: "base" }
+    );
 
-      const dateA = parseEventDate(a.event_date);
-      const dateB = parseEventDate(b.event_date);
-      const timeA = dateA ? dateA.getTime() : null;
-      const timeB = dateB ? dateB.getTime() : null;
-      if (timeA === null && timeB !== null) return 1;
-      if (timeB === null && timeA !== null) return -1;
-      if (timeA === null && timeB === null) return 0;
-      return mode === "date-asc" ? timeA - timeB : timeB - timeA;
-    }
+    return mode === "name-asc" ? result : -result;
+  }
+
+  // Sort berdasarkan status (A-Z / Z-A)
+  if (mode === "status-asc" || mode === "status-desc") {
+    const result = String(a.status || "Pending").localeCompare(
+      String(b.status || "Pending"),
+      "id",
+      { sensitivity: "base" }
+    );
+
+    return mode === "status-asc" ? result : -result;
+  }
+
+  // Sort berdasarkan jumlah foto (terbanyak / tersedikit)
+  if (mode === "count-asc" || mode === "count-desc") {
+    const countA = Number(a.jumlah_foto_ditemukan) || 0;
+    const countB = Number(b.jumlah_foto_ditemukan) || 0;
+
+    return mode === "count-asc"
+      ? countA - countB
+      : countB - countA;
+  }
+
+  // Sort berdasarkan tanggal
+  const dateA = parseEventDate(a.event_date);
+  const dateB = parseEventDate(b.event_date);
+
+  const timeA = dateA ? dateA.getTime() : null;
+  const timeB = dateB ? dateB.getTime() : null;
+
+  if (timeA === null && timeB !== null) return 1;
+  if (timeB === null && timeA !== null) return -1;
+  if (timeA === null && timeB === null) return 0;
+
+  return mode === "date-asc"
+    ? timeA - timeB
+    : timeB - timeA;
+}
 
     function updateSortHeaderIcons() {
-      const nameIcon = document.getElementById("sortNameIcon");
-      const dateIcon = document.getElementById("sortDateIcon");
-      if (nameIcon) nameIcon.textContent = eventSortMode === "name-asc" ? "↑" : eventSortMode === "name-desc" ? "↓" : "↕";
-      if (dateIcon) dateIcon.textContent = eventSortMode === "date-asc" ? "↑" : eventSortMode === "date-desc" ? "↓" : "↕";
-    }
+  const nameIcon = document.getElementById("sortNameIcon");
+  const dateIcon = document.getElementById("sortDateIcon");
+  const statusIcon = document.getElementById("sortStatusIcon");
+  const countIcon = document.getElementById("sortCountIcon");
+
+  if (nameIcon) {
+    nameIcon.textContent =
+      eventSortMode === "name-asc" ? "↑" :
+      eventSortMode === "name-desc" ? "↓" : "↕";
+  }
+
+  if (dateIcon) {
+    dateIcon.textContent =
+      eventSortMode === "date-asc" ? "↑" :
+      eventSortMode === "date-desc" ? "↓" : "↕";
+  }
+
+  if (statusIcon) {
+    statusIcon.textContent =
+      eventSortMode === "status-asc" ? "↑" :
+      eventSortMode === "status-desc" ? "↓" : "↕";
+  }
+
+  if (countIcon) {
+    countIcon.textContent =
+      eventSortMode === "count-asc" ? "↑" :
+      eventSortMode === "count-desc" ? "↓" : "↕";
+  }
+}
 
     function toggleWeekGroup(key) {
       if (collapsedWeekGroups.has(key)) collapsedWeekGroups.delete(key);
@@ -865,7 +961,7 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
           html += `
             <tr class="table-row align-top">
               <td class="py-4 px-5 text-primary font-semibold">${escapeHtml(ev.event_name)}</td>
-              <td class="py-4 px-5 text-secondary whitespace-nowrap">${escapeHtml(ev.event_date)}</td>
+              <td class="py-4 px-5 text-secondary whitespace-nowrap">${escapeHtml(formatDateDisplay(ev.event_date))}</td>
               <td class="py-4 px-5">${badge}</td>
               <td class="py-4 px-5 text-xs">${Number(ev.jumlah_foto_ditemukan) || 0} Photos</td>
               <td class="py-4 px-5 text-tertiary font-mono text-xs">${escapeHtml(jsonName)}</td>
@@ -890,6 +986,21 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
       eventSortMode = eventSortMode === "date-desc" ? "date-asc" : "date-desc";
       renderEventTable(currentEventDocs);
     });
+    document.getElementById("sortStatusBtn").addEventListener("click", () => {
+  eventSortMode = eventSortMode === "status-asc"
+    ? "status-desc"
+    : "status-asc";
+
+  renderEventTable(currentEventDocs);
+});
+
+document.getElementById("sortCountBtn").addEventListener("click", () => {
+  eventSortMode = eventSortMode === "count-desc"
+    ? "count-asc"
+    : "count-desc";
+
+  renderEventTable(currentEventDocs);
+});
 
     function loadUserEvents(email) {
       if (unsubscribeSnapshot) unsubscribeSnapshot();
