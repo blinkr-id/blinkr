@@ -717,6 +717,31 @@
 
         let eventMap = {};
         window.database = [];
+        function formatDateDisplay(value) {
+    const match = String(value || "").match(
+        /^(\d{4})-(\d{2})-(\d{2})$/
+    );
+
+    if (!match) return value || "-";
+
+    const [, year, month, day] = match;
+
+    const date = new Date(
+        Number(year),
+        Number(month) - 1,
+        Number(day)
+    );
+
+    if (
+        date.getFullYear() !== Number(year) ||
+        date.getMonth() !== Number(month) - 1 ||
+        date.getDate() !== Number(day)
+    ) {
+        return value;
+    }
+
+    return `${day}-${month}-${year}`;
+}
 
         const selPhoto = document.getElementById('select-photographer');
         const btnOpenPhotographerModal = document.getElementById('btn-open-photographer-modal');
@@ -1098,15 +1123,17 @@
 
             // Render opsi ke dalam Modal
             customEventList.innerHTML = pInfo.events.map(ev => `
-                <div class="event-option-item p-3.5 rounded-xl border border-default hover:border-brand-orange bg-app cursor-pointer transition flex items-center justify-between"
-                     data-json="${ev.jsonFile}" data-version="${ev.version || '1'}" data-name="${escapeHtml(ev.eventName)} (${ev.date})">
-                    <div>
-                        <p class="font-bold text-sm text-primary">${escapeHtml(ev.eventName)}</p>
-                        <p class="text-xs text-secondary mt-0.5">📅 ${escapeHtml(ev.date)}</p>
-                    </div>
-                    <span class="w-5 h-5 rounded-full border-2 border-default flex items-center justify-center check-indicator"></span>
-                </div>
-            `).join('');
+    <div class="event-option-item p-3.5 rounded-xl border border-default hover:border-brand-orange bg-app cursor-pointer transition flex items-center justify-between"
+         data-json="${escapeHtml(ev.jsonFile)}"
+         data-version="${ev.version || '1'}"
+         data-name="${escapeHtml(ev.eventName)} (${escapeHtml(formatDateDisplay(ev.date))})">
+        <div>
+            <p class="font-bold text-sm text-primary">${escapeHtml(ev.eventName)}</p>
+            <p class="text-xs text-secondary mt-0.5">📅 ${escapeHtml(formatDateDisplay(ev.date))}</p>
+        </div>
+        <span class="w-5 h-5 rounded-full border-2 border-default flex items-center justify-center check-indicator"></span>
+    </div>
+`).join('');
 
             // Pasang event klik pada masing-masing opsi event
             document.querySelectorAll('.event-option-item').forEach(item => {
