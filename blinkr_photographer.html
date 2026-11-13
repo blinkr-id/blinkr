@@ -337,7 +337,25 @@
       <div class="flex justify-between items-center mb-5 pb-3 border-b border-default"><h3 class="text-lg font-bold text-primary">Edit Profile</h3><button id="btnCloseProfileModal" class="text-tertiary hover:text-primary transition">✕</button></div>
       <form id="profileForm" class="space-y-4">
         <div><label class="form-label">Display Name</label><input type="text" id="editDisplayName" required class="form-control"></div>
-        <div><label class="form-label">Profile Photo URL</label><input type="url" id="editPhotoURL" class="form-control"></div>
+        <div class="space-y-2">
+          <label class="form-label">Profile Photo</label>
+          <div class="flex items-center gap-4">
+            <img id="editProfilePhotoPreview" src="https://via.placeholder.com/96" alt="Preview foto profil" class="w-20 h-20 rounded-full object-cover border-2 border-default bg-app shrink-0">
+            <div class="min-w-0 flex flex-col items-start gap-2">
+              <input type="file" id="editProfilePhotoFile" accept="image/jpeg,image/png,image/webp" class="hidden">
+              <button type="button" id="btnChooseProfilePhoto" class="btn-secondary px-4 py-2 rounded-xl font-semibold text-xs inline-flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16V4m0 0L7 9m5-5 5 5M4 16v3a1 1 0 001 1h14a1 1 0 001-1v-3"/></svg>
+                Upload Photo
+              </button>
+              <button type="button" id="btnResetProfilePhoto" class="text-xs font-semibold text-secondary hover:text-primary transition">Use Google Photo</button>
+              <p id="profilePhotoStatus" class="text-[10px] text-secondary leading-relaxed">JPG, PNG, WebP · Maksimal 1 MB. Foto dipotong persegi dan dioptimasi menjadi WebP 512 × 512.</p>
+            </div>
+          </div>
+          <div id="profilePhotoProgressWrap" class="hidden space-y-1">
+            <div class="flex justify-between text-[10px] text-secondary"><span id="profilePhotoProgressLabel">Uploading photo...</span><span id="profilePhotoProgressValue">0%</span></div>
+            <div class="h-1.5 rounded-full bg-app overflow-hidden"><div id="profilePhotoProgressBar" class="h-full rounded-full bg-brand-orange" style="width:0%"></div></div>
+          </div>
+        </div>
         <div class="border-t border-default pt-4 space-y-3">
           <div>
             <p class="text-sm font-bold text-primary">Public Contact Channels</p>
@@ -430,6 +448,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getFirestore, collection, addDoc, query, where, onSnapshot, doc, setDoc, getDoc, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
     const BLINKR_ROUTES = {
       home: "./index.html",
@@ -492,12 +511,20 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+    const storage = getStorage(app);
     const provider = new GoogleAuthProvider();
 
     let currentCustomName = "";
     let currentCustomPhoto = "";
     let currentWhatsApp = "";
     let currentInstagram = "";
+    let currentPhotoStoragePath = "";
+    let pendingPhotoCleanupPath = "";
+    let pendingProfileImageBlob = null;
+    let pendingProfileImagePreviewUrl = "";
+    let resetProfilePhotoToGoogle = false;
+    const PROFILE_PHOTO_MAX_BYTES = 1024 * 1024;
+    const PROFILE_PHOTO_MAX_DIMENSION = 512;
     let lastPublicProfileSyncSignature = "";
     let currentQuota = 0;
     let currentDailyFreeQuota = 0;
@@ -617,8 +644,7 @@
       if (!isMasterAccount && currentQuota <= 0) return alert("Kuota foto habis. Periksa saldo kuota harian atau kuota pembelian.");
       document.getElementById("eventModal").classList.remove("hidden");
     });
-    // WHATSAPP MESSAGE HELPER
-    // Unicode emoji ditulis sebagai escape agar aman meskipun file diproses editor dengan encoding berbeda.
+    // WHATSAPP MESSAGE HELPER. Pesan sengaja tanpa emoji agar aman di semua perangkat.
     function openWhatsAppMessage(message) {
       const whatsappUrl = new URL(`https://wa.me/${BLINKR_WHATSAPP_NUMBER}`);
       whatsappUrl.searchParams.set("text", message);
@@ -636,7 +662,7 @@
       const supportName = currentCustomName || auth.currentUser?.displayName || "Photographer";
       const supportEmail = auth.currentUser?.email || "-";
       const supportMessage = [
-        "Halo tim Blinkr!",
+        "Halo tim Blinkr",
         "",
         "Saya membutuhkan bantuan terkait layanan Blinkr.",
         "",
@@ -667,7 +693,7 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
     auth.currentUser?.email || "-";
 
   const message = [
-  "Halo Blinkr!",
+  "Halo *Blinkr*!",
   "",
   "Saya ingin melakukan top up kuota.",
   "",
@@ -724,7 +750,7 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
 
     async function syncPublicPhotographerProfile() {
       const publicId = String(currentPublicId || "").trim();
-      if (!publicId || !auth.currentUser) return;
+      if (!publicId || !auth.currentUser) return true;
 
       const publicProfile = {
         photographer_id: publicId,
@@ -746,21 +772,219 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
       try {
         await setDoc(doc(db, "public_photographers", publicId), publicProfile, { merge: true });
         lastPublicProfileSyncSignature = signature;
+        return true;
       } catch (error) {
         console.warn("Gagal memperbarui profil publik fotografer:", error);
+        return false;
       }
     }
 
+    function formatFileSize(bytes) {
+      if (!Number.isFinite(bytes) || bytes <= 0) return "0 KB";
+      return bytes < 1024 * 1024
+        ? `${(bytes / 1024).toFixed(0)} KB`
+        : `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+    }
+
+    function setProfilePhotoStatus(message, isError = false) {
+      const status = document.getElementById("profilePhotoStatus");
+      status.textContent = message;
+      status.classList.toggle("text-danger", isError);
+      status.classList.toggle("text-secondary", !isError);
+    }
+
+    function setProfilePhotoPreview(url) {
+      const preview = document.getElementById("editProfilePhotoPreview");
+      preview.src = url || "https://via.placeholder.com/96";
+    }
+
+    function clearPendingProfilePhoto() {
+      if (pendingProfileImagePreviewUrl) {
+        URL.revokeObjectURL(pendingProfileImagePreviewUrl);
+        pendingProfileImagePreviewUrl = "";
+      }
+      pendingProfileImageBlob = null;
+      resetProfilePhotoToGoogle = false;
+      const input = document.getElementById("editProfilePhotoFile");
+      if (input) input.value = "";
+      const progressWrap = document.getElementById("profilePhotoProgressWrap");
+      if (progressWrap) progressWrap.classList.add("hidden");
+      const progressBar = document.getElementById("profilePhotoProgressBar");
+      if (progressBar) progressBar.style.width = "0%";
+      const progressValue = document.getElementById("profilePhotoProgressValue");
+      if (progressValue) progressValue.textContent = "0%";
+    }
+
+    function canvasToBlob(canvas, type, quality) {
+      return new Promise((resolve, reject) => {
+        canvas.toBlob((blob) => {
+          if (blob) resolve(blob);
+          else reject(new Error("Browser tidak dapat memproses gambar ini."));
+        }, type, quality);
+      });
+    }
+
+    async function optimizeProfileImage(file) {
+      const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+      if (!file || !allowedTypes.includes(file.type)) {
+        throw new Error("Format foto harus JPG, PNG, atau WebP.");
+      }
+      if (file.size > PROFILE_PHOTO_MAX_BYTES) {
+        throw new Error("Ukuran foto maksimal 1 MB. Pilih gambar yang lebih kecil.");
+      }
+
+      const sourceUrl = URL.createObjectURL(file);
+      try {
+        const image = await new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve(img);
+          img.onerror = () => reject(new Error("Gambar tidak dapat dibuka. Coba file gambar lain."));
+          img.src = sourceUrl;
+        });
+
+        const sourceWidth = image.naturalWidth || image.width;
+        const sourceHeight = image.naturalHeight || image.height;
+        if (!sourceWidth || !sourceHeight) throw new Error("Dimensi gambar tidak valid.");
+
+        // Crop persegi dari tengah agar hasil selalu cocok untuk avatar bundar.
+        const cropSize = Math.min(sourceWidth, sourceHeight);
+        const sourceX = Math.floor((sourceWidth - cropSize) / 2);
+        const sourceY = Math.floor((sourceHeight - cropSize) / 2);
+        const outputSize = Math.min(PROFILE_PHOTO_MAX_DIMENSION, cropSize);
+        const canvas = document.createElement("canvas");
+        canvas.width = outputSize;
+        canvas.height = outputSize;
+        const context = canvas.getContext("2d", { alpha: false });
+        if (!context) throw new Error("Browser tidak mendukung pemrosesan gambar.");
+        context.fillStyle = "#FFFFFF";
+        context.fillRect(0, 0, outputSize, outputSize);
+        context.drawImage(
+          image,
+          sourceX, sourceY, cropSize, cropSize,
+          0, 0, outputSize, outputSize
+        );
+
+        // WebP diperlukan karena object Storage selalu bernama avatar.webp.
+        const qualities = [0.82, 0.72, 0.62, 0.52, 0.42];
+        let blob = null;
+        for (const quality of qualities) {
+          blob = await canvasToBlob(canvas, "image/webp", quality);
+          if (blob.type !== "image/webp") {
+            throw new Error("Browser ini belum mendukung ekspor WebP. Coba gunakan Chrome, Edge, atau Safari versi terbaru.");
+          }
+          if (blob.size <= PROFILE_PHOTO_MAX_BYTES) break;
+        }
+
+        if (!blob || blob.size > PROFILE_PHOTO_MAX_BYTES) {
+          throw new Error("Hasil optimasi masih lebih dari 1 MB. Pilih gambar yang lebih sederhana.");
+        }
+
+        return { blob, width: outputSize, height: outputSize };
+      } finally {
+        URL.revokeObjectURL(sourceUrl);
+      }
+    }
+
+    function uploadProfileImage(blob, userId) {
+      return new Promise((resolve, reject) => {
+        // Path tetap: setiap upload berikutnya menimpa objek yang sama.
+        const path = `profile_photos/${userId}/avatar.webp`;
+        const imageRef = storageRef(storage, path);
+        const uploadTask = uploadBytesResumable(imageRef, blob, {
+          contentType: "image/webp",
+          // URL publik akan diberi parameter versi baru setelah setiap upload.
+          cacheControl: "public,max-age=3600"
+        });
+
+        const progressWrap = document.getElementById("profilePhotoProgressWrap");
+        const progressBar = document.getElementById("profilePhotoProgressBar");
+        const progressValue = document.getElementById("profilePhotoProgressValue");
+        const progressLabel = document.getElementById("profilePhotoProgressLabel");
+        progressWrap.classList.remove("hidden");
+        progressLabel.textContent = "Uploading photo...";
+
+        uploadTask.on("state_changed", (snapshot) => {
+          const percent = snapshot.totalBytes > 0
+            ? Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
+            : 0;
+          progressBar.style.width = `${percent}%`;
+          progressValue.textContent = `${percent}%`;
+        }, reject, async () => {
+          try {
+            const rawDownloadURL = await getDownloadURL(imageRef);
+            // Mencegah browser menampilkan cache foto profil versi sebelumnya.
+            const versionedURL = new URL(rawDownloadURL);
+            versionedURL.searchParams.set("v", String(Date.now()));
+            resolve({ path, downloadURL: versionedURL.toString(), ref: imageRef });
+          } catch (error) {
+            reject(error);
+          }
+        });
+      });
+    }
+
+    async function deletePreviousProfileImage(path) {
+      if (!path) return;
+      try {
+        await deleteObject(storageRef(storage, path));
+      } catch (error) {
+        // FileNotFound berarti file lama memang sudah tidak ada; error lain dicatat.
+        if (error.code !== "storage/object-not-found") {
+          console.warn("Foto profil lama belum berhasil dihapus dari Storage:", error);
+        }
+      }
+    }
+
+    function closeProfileModal() {
+      clearPendingProfilePhoto();
+      setProfilePhotoPreview(currentCustomPhoto || auth.currentUser?.photoURL || "");
+      document.getElementById("profileModal").classList.add("hidden");
+    }
+
+    document.getElementById("btnChooseProfilePhoto").addEventListener("click", () => {
+      document.getElementById("editProfilePhotoFile").click();
+    });
+
+    document.getElementById("editProfilePhotoFile").addEventListener("change", async (event) => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      try {
+        const optimized = await optimizeProfileImage(file);
+        if (pendingProfileImagePreviewUrl) URL.revokeObjectURL(pendingProfileImagePreviewUrl);
+        pendingProfileImageBlob = optimized.blob;
+        resetProfilePhotoToGoogle = false;
+        pendingProfileImagePreviewUrl = URL.createObjectURL(optimized.blob);
+        setProfilePhotoPreview(pendingProfileImagePreviewUrl);
+        setProfilePhotoStatus(`Siap diunggah · ${formatFileSize(optimized.blob.size)} · ${optimized.width} × ${optimized.height} px · WebP`);
+      } catch (error) {
+        setProfilePhotoStatus(error.message || "Foto gagal diproses.", true);
+      } finally {
+        event.target.value = "";
+      }
+    });
+
+    document.getElementById("btnResetProfilePhoto").addEventListener("click", () => {
+      if (pendingProfileImagePreviewUrl) URL.revokeObjectURL(pendingProfileImagePreviewUrl);
+      pendingProfileImagePreviewUrl = "";
+      pendingProfileImageBlob = null;
+      resetProfilePhotoToGoogle = true;
+      document.getElementById("editProfilePhotoFile").value = "";
+      setProfilePhotoPreview(auth.currentUser?.photoURL || "");
+      setProfilePhotoStatus("Foto profil akan dikembalikan ke foto Google saat disimpan.");
+    });
+
     document.getElementById("btnEditProfile").addEventListener("click", () => {
+      clearPendingProfilePhoto();
       document.getElementById("editDisplayName").value = currentCustomName;
-      document.getElementById("editPhotoURL").value = currentCustomPhoto;
       document.getElementById("editWhatsApp").value = currentWhatsApp;
       document.getElementById("editInstagram").value = currentInstagram;
       document.getElementById("profileError").classList.add("hidden");
+      setProfilePhotoPreview(currentCustomPhoto || auth.currentUser?.photoURL || "");
+      setProfilePhotoStatus("JPG, PNG, WebP · Maksimal 1 MB. Foto dipotong persegi dan dioptimasi menjadi WebP 512 × 512.");
       document.getElementById("profileModal").classList.remove("hidden");
     });
-    document.getElementById("btnCloseProfileModal").addEventListener("click", () => document.getElementById("profileModal").classList.add("hidden"));
-    document.getElementById("btnCancelProfileModal").addEventListener("click", () => document.getElementById("profileModal").classList.add("hidden"));
+    document.getElementById("btnCloseProfileModal").addEventListener("click", closeProfileModal);
+    document.getElementById("btnCancelProfileModal").addEventListener("click", closeProfileModal);
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -788,14 +1012,16 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
             const data = userDocSnap.data();
             currentQuotaProfile = data;
             currentCustomName = data.custom_name || user.displayName;
-            currentCustomPhoto = data.photo_url || user.photoURL;
+            currentCustomPhoto = data.photo_url || user.photoURL || "";
+            currentPhotoStoragePath = data.photo_storage_path || "";
             currentWhatsApp = data.whatsapp || "";
             currentInstagram = data.instagram || "";
             currentPublicId = data.public_id || "";
           } else {
             const initialProfile = {
               custom_name: user.displayName,
-              photo_url: user.photoURL,
+              photo_url: user.photoURL || "",
+              photo_storage_path: "",
               whatsapp: "",
               instagram: "",
               email: user.email,
@@ -806,7 +1032,8 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
             await setDoc(userDocRef, initialProfile);
             currentQuotaProfile = initialProfile;
             currentCustomName = user.displayName;
-            currentCustomPhoto = user.photoURL;
+            currentCustomPhoto = user.photoURL || "";
+            currentPhotoStoragePath = "";
             currentWhatsApp = "";
             currentInstagram = "";
             currentPublicId = "";
@@ -855,17 +1082,35 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
       saveButton.disabled = true;
       saveButton.textContent = "Saving...";
 
+      let uploadedPhoto = null;
+      const previousPhotoPath = currentPhotoStoragePath;
+
       try {
         if (!auth.currentUser) throw new Error("Sesi login tidak tersedia. Silakan login ulang.");
 
         const nName = document.getElementById("editDisplayName").value.trim();
-        const nPhoto = document.getElementById("editPhotoURL").value.trim() || auth.currentUser.photoURL || "";
         const nWhatsApp = normalizeWhatsAppInput(document.getElementById("editWhatsApp").value);
         const nInstagram = normalizeInstagramInput(document.getElementById("editInstagram").value);
+        let nPhoto = currentCustomPhoto || auth.currentUser.photoURL || "";
+        let nPhotoStoragePath = currentPhotoStoragePath || "";
+
+        if (pendingProfileImageBlob) {
+          setProfilePhotoStatus("Mengunggah foto profil...");
+          uploadedPhoto = await uploadProfileImage(
+            pendingProfileImageBlob,
+            auth.currentUser.uid
+          );
+          nPhoto = uploadedPhoto.downloadURL;
+          nPhotoStoragePath = uploadedPhoto.path;
+        } else if (resetProfilePhotoToGoogle) {
+          nPhoto = auth.currentUser.photoURL || "";
+          nPhotoStoragePath = "";
+        }
 
         await setDoc(doc(db, "users", auth.currentUser.uid), {
           custom_name: nName,
           photo_url: nPhoto,
+          photo_storage_path: nPhotoStoragePath,
           whatsapp: nWhatsApp,
           instagram: nInstagram,
           profile_updated_at: new Date(),
@@ -874,17 +1119,43 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
 
         currentCustomName = nName;
         currentCustomPhoto = nPhoto;
+        currentPhotoStoragePath = nPhotoStoragePath;
         currentWhatsApp = nWhatsApp;
         currentInstagram = nInstagram;
-        await syncPublicPhotographerProfile();
-        document.getElementById("profileModal").classList.add("hidden");
+        lastPublicProfileSyncSignature = "";
+        const publicProfileSynced = await syncPublicPhotographerProfile();
+
+        document.getElementById("userName").textContent = currentCustomName || "Photographer";
+        document.getElementById("userAvatar").src = currentCustomPhoto || "https://via.placeholder.com/40";
+
+        if (!publicProfileSynced) {
+          if (previousPhotoPath && previousPhotoPath !== nPhotoStoragePath) {
+            pendingPhotoCleanupPath = previousPhotoPath;
+          }
+          throw new Error("Profil akun sudah tersimpan, tetapi katalog publik belum berhasil diperbarui. Periksa koneksi lalu tekan Save Profile kembali. Foto lama belum dihapus.");
+        }
+
+        const cleanupPaths = [...new Set([
+          pendingPhotoCleanupPath,
+          previousPhotoPath !== nPhotoStoragePath ? previousPhotoPath : ""
+        ].filter(Boolean))];
+        for (const oldPath of cleanupPaths) {
+          await deletePreviousProfileImage(oldPath);
+        }
+        pendingPhotoCleanupPath = "";
+
+        closeProfileModal();
       } catch (error) {
         console.error("Failed to save photographer profile:", error);
-        errorBox.textContent = error.message || "Profil gagal disimpan. Periksa koneksi dan Firestore Rules.";
+        // Upload memakai path avatar.webp yang sama. Jangan hapus objek di sini,
+        // karena objek tersebut mungkin sudah menggantikan foto aktif sebelumnya.
+        errorBox.textContent = error.message || "Profil gagal disimpan. Periksa koneksi, Firebase Storage Rules, dan Firestore Rules.";
         errorBox.classList.remove("hidden");
       } finally {
         saveButton.disabled = false;
         saveButton.textContent = "Save Profile";
+        const progressWrap = document.getElementById("profilePhotoProgressWrap");
+        if (progressWrap) progressWrap.classList.add("hidden");
       }
     });
 
