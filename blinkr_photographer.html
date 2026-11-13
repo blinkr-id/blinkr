@@ -617,6 +617,14 @@
       if (!isMasterAccount && currentQuota <= 0) return alert("Kuota foto habis. Periksa saldo kuota harian atau kuota pembelian.");
       document.getElementById("eventModal").classList.remove("hidden");
     });
+    // WHATSAPP MESSAGE HELPER
+    // Unicode emoji ditulis sebagai escape agar aman meskipun file diproses editor dengan encoding berbeda.
+    function openWhatsAppMessage(message) {
+      const whatsappUrl = new URL(`https://wa.me/${BLINKR_WHATSAPP_NUMBER}`);
+      whatsappUrl.searchParams.set("text", message);
+      window.open(whatsappUrl.toString(), "_blank", "noopener,noreferrer");
+    }
+
     // WHATSAPP TOP UP
     // CONTACT SUPPORT: separate default message from the quota top-up message.
     function openBlinkrSupportChat() {
@@ -628,7 +636,7 @@
       const supportName = currentCustomName || auth.currentUser?.displayName || "Photographer";
       const supportEmail = auth.currentUser?.email || "-";
       const supportMessage = [
-        "Halo tim Blinkr! 👋",
+        "Halo tim Blinkr! \u{1F44B}",
         "",
         "Saya membutuhkan bantuan terkait layanan Blinkr.",
         "",
@@ -638,8 +646,7 @@
         "Mohon bantuannya. Terima kasih!"
       ].join("\n");
 
-      const supportUrl = `https://wa.me/${BLINKR_WHATSAPP_NUMBER}?text=${encodeURIComponent(supportMessage)}`;
-      window.open(supportUrl, "_blank", "noopener,noreferrer");
+      openWhatsAppMessage(supportMessage);
     }
 
     document.getElementById("btnContactSupport").addEventListener("click", openBlinkrSupportChat);
@@ -660,24 +667,21 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
     auth.currentUser?.email || "-";
 
   const message = [
-  "Halo *Blinkr!* 👋📸",
+  "Halo *Blinkr!* \u{1F44B}\u{1F4F8}",
   "",
   "Saya ingin melakukan top up kuota.",
   "",
-  "👤 *Data Fotografer*",
+  "\u{1F464} *Data Fotografer*",
   "",
   `Nama: _${photographerName}_`,
   `Email: _${photographerEmail}_`,
   "",
   "Mohon kirimkan pricelist dan informasi cara pembayarannya.",
   "",
-  "Terima kasih! 🙏"
+  "Terima kasih! \u{1F64F}"
 ].join("\n");
 
-  const whatsappURL =
-    `https://wa.me/${BLINKR_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-
-  window.open(whatsappURL, "_blank", "noopener,noreferrer");
+  openWhatsAppMessage(message);
 
 });
     document.getElementById("btnCloseModal").addEventListener("click", () => document.getElementById("eventModal").classList.add("hidden"));
