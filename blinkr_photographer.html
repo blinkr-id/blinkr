@@ -131,6 +131,78 @@
     .week-group-chevron { color: var(--brand-orange); font-size: 13px; transition: transform .2s ease; }
     .week-group-button[aria-expanded="false"] .week-group-chevron { transform: rotate(-90deg); }
     .sort-header-button { cursor: pointer; }
+
+
+    /* Floating WhatsApp support bubble */
+    .blinkr-support-chat {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 45;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 17px 7px 7px;
+      border: 1px solid rgba(37, 211, 102, 0.22);
+      border-radius: 9999px;
+      background: #FFFFFF;
+      color: #101D38;
+      box-shadow: 0 10px 30px rgba(16, 29, 56, 0.18);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .blinkr-support-chat:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 34px rgba(16, 29, 56, 0.22);
+    }
+    .blinkr-support-chat:focus-visible {
+      outline: 3px solid rgba(37, 211, 102, 0.35);
+      outline-offset: 3px;
+    }
+    .blinkr-support-chat-icon {
+      width: 46px;
+      height: 46px;
+      flex: 0 0 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: #FFFFFF;
+      background: #25D366;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.08);
+    }
+    .blinkr-support-chat-icon svg { width: 25px; height: 25px; }
+    .blinkr-support-chat-copy {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+    .blinkr-support-chat-copy span {
+      color: #667085;
+      font-size: 10px;
+      font-weight: 500;
+    }
+    .blinkr-support-chat-copy strong {
+      color: #101D38;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 3px;
+    }
+    [data-theme="dark"] .blinkr-support-chat {
+      background: #101D38;
+      border-color: rgba(37, 211, 102, 0.3);
+      color: #F0F1F5;
+    }
+    [data-theme="dark"] .blinkr-support-chat-copy span { color: #A0AABF; }
+    [data-theme="dark"] .blinkr-support-chat-copy strong { color: #F0F1F5; }
+    @media (max-width: 480px) {
+      .blinkr-support-chat { right: 14px; bottom: 14px; gap: 8px; padding: 6px 13px 6px 6px; }
+      .blinkr-support-chat-icon { width: 42px; height: 42px; flex-basis: 42px; }
+      .blinkr-support-chat-copy strong { font-size: 11px; }
+    }
+
   </style>
 </head>
 <body class="min-h-screen selection:bg-brand-orange selection:text-white">
@@ -246,6 +318,19 @@
     </main>
   </div>
 
+  <!-- Floating Contact Support bubble -->
+  <button type="button" id="btnContactSupport" class="blinkr-support-chat" aria-label="Contact Blinkr Support via WhatsApp" title="Contact Blinkr Support">
+    <span class="blinkr-support-chat-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M20.52 3.48A11.87 11.87 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.96L.06 24l6.29-1.65a11.88 11.88 0 0 0 5.7 1.45h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.17-3.44-8.42ZM12.06 21.8a9.85 9.85 0 0 1-5.02-1.37l-.36-.21-3.73.98.99-3.64-.24-.37a9.87 9.87 0 0 1-1.52-5.29c0-5.45 4.44-9.89 9.9-9.89a9.8 9.8 0 0 1 6.99 2.9 9.8 9.8 0 0 1 2.9 6.99c0 5.46-4.44 9.9-9.9 9.9Zm5.43-7.41c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.48-.88-.78-1.48-1.75-1.65-2.05-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.08-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.47s1.07 2.87 1.22 3.07c.15.2 2.1 3.2 5.08 4.48.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.08 1.75-.72 2-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35Z"/>
+      </svg>
+    </span>
+    <span class="blinkr-support-chat-copy">
+      <span>Butuh bantuan?</span>
+      <strong>Contact Support</strong>
+    </span>
+  </button>
+
   <!-- ================= MODALS ================= -->
   <div id="profileModal" class="fixed inset-0 modal-backdrop-custom z-50 flex items-center justify-center p-4 hidden">
     <div class="modal-content-custom max-w-md w-full p-6 relative">
@@ -253,6 +338,23 @@
       <form id="profileForm" class="space-y-4">
         <div><label class="form-label">Display Name</label><input type="text" id="editDisplayName" required class="form-control"></div>
         <div><label class="form-label">Profile Photo URL</label><input type="url" id="editPhotoURL" class="form-control"></div>
+        <div class="border-t border-default pt-4 space-y-3">
+          <div>
+            <p class="text-sm font-bold text-primary">Public Contact Channels</p>
+            <p class="text-xs text-secondary mt-1">Kontak ini akan ditampilkan kepada Client pada halaman Photo Finder. Isi salah satu atau keduanya.</p>
+          </div>
+          <div>
+            <label for="editWhatsApp" class="form-label">WhatsApp Number <span class="normal-case font-normal tracking-normal">(optional)</span></label>
+            <input type="tel" id="editWhatsApp" class="form-control" inputmode="tel" autocomplete="tel" placeholder="08xxxxxxxxxx atau 628xxxxxxxxxx">
+            <p class="text-[10px] text-secondary mt-1">Nomor akan dibuka langsung melalui WhatsApp. Format 08 atau 62 diterima.</p>
+          </div>
+          <div>
+            <label for="editInstagram" class="form-label">Instagram Username <span class="normal-case font-normal tracking-normal">(optional)</span></label>
+            <input type="text" id="editInstagram" class="form-control" autocomplete="off" placeholder="@username atau instagram.com/username">
+            <p class="text-[10px] text-secondary mt-1">Client akan diarahkan langsung ke halaman profil Instagram Anda.</p>
+          </div>
+          <p id="profileError" class="hidden text-xs text-danger" role="alert"></p>
+        </div>
         <div class="flex justify-end gap-3 pt-4">
           <button type="button" id="btnCancelProfileModal" class="btn-secondary px-5 py-2 rounded-xl font-semibold text-sm">Cancel</button>
           <button type="submit" class="btn-primary px-6 py-2 rounded-xl font-semibold text-sm">Save Profile</button>
@@ -335,7 +437,7 @@
       photoFinder: "./blinkr_client.html",
     };
     // BLINKR WHATSAPP CONFIGURATION
-    const BLINKR_WHATSAPP_NUMBER = "";
+    const BLINKR_WHATSAPP_NUMBER = "6285156504345";
 
     document.querySelectorAll('.btn-route').forEach(button => {
       button.addEventListener('click', (e) => {
@@ -394,6 +496,9 @@
 
     let currentCustomName = "";
     let currentCustomPhoto = "";
+    let currentWhatsApp = "";
+    let currentInstagram = "";
+    let lastPublicProfileSyncSignature = "";
     let currentQuota = 0;
     let currentDailyFreeQuota = 0;
     let currentPurchasedQuota = 0;
@@ -513,6 +618,32 @@
       document.getElementById("eventModal").classList.remove("hidden");
     });
     // WHATSAPP TOP UP
+    // CONTACT SUPPORT: separate default message from the quota top-up message.
+    function openBlinkrSupportChat() {
+      if (!/^\d{8,15}$/.test(BLINKR_WHATSAPP_NUMBER)) {
+        alert("Nomor WhatsApp Support Blinkr belum diatur. Isi BLINKR_WHATSAPP_NUMBER pada konfigurasi halaman Photographer.");
+        return;
+      }
+
+      const supportName = currentCustomName || auth.currentUser?.displayName || "Photographer";
+      const supportEmail = auth.currentUser?.email || "-";
+      const supportMessage = [
+        "Halo tim Blinkr! 👋",
+        "",
+        "Saya membutuhkan bantuan terkait layanan Blinkr.",
+        "",
+        `Nama: ${supportName}`,
+        `Email akun: ${supportEmail}`,
+        "",
+        "Mohon bantuannya. Terima kasih!"
+      ].join("\n");
+
+      const supportUrl = `https://wa.me/${BLINKR_WHATSAPP_NUMBER}?text=${encodeURIComponent(supportMessage)}`;
+      window.open(supportUrl, "_blank", "noopener,noreferrer");
+    }
+
+    document.getElementById("btnContactSupport").addEventListener("click", openBlinkrSupportChat);
+
 document.getElementById("btnTopUpQuota").addEventListener("click", () => {
 
   if (!/^\d{8,15}$/.test(BLINKR_WHATSAPP_NUMBER)) {
@@ -552,9 +683,76 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
     document.getElementById("btnCloseModal").addEventListener("click", () => document.getElementById("eventModal").classList.add("hidden"));
     document.getElementById("btnCancelModal").addEventListener("click", () => document.getElementById("eventModal").classList.add("hidden"));
 
+    function normalizeWhatsAppInput(value) {
+      const raw = String(value || "").trim();
+      if (!raw) return "";
+
+      let digits = raw.replace(/\D/g, "");
+      if (digits.startsWith("0")) {
+        digits = `62${digits.slice(1)}`;
+      } else if (/^8\d{8,12}$/.test(digits)) {
+        digits = `62${digits}`;
+      }
+
+      if (!/^\d{8,15}$/.test(digits)) {
+        throw new Error("Nomor WhatsApp tidak valid. Gunakan format 08xxxxxxxxxx atau kode negara, misalnya 628xxxxxxxxxx.");
+      }
+      return digits;
+    }
+
+    function normalizeInstagramInput(value) {
+      let handle = String(value || "").trim();
+      if (!handle) return "";
+
+      const urlMatch = handle.match(/(?:https?:\/\/)?(?:www\.)?(?:instagram\.com|ig\.me\/m)\/([^/?#]+)/i);
+      if (urlMatch) handle = urlMatch[1];
+      handle = handle.replace(/^@/, "").trim();
+
+      if (!/^[A-Za-z0-9._]{1,30}$/.test(handle)) {
+        throw new Error("Username Instagram tidak valid. Masukkan username tanpa spasi, maksimal 30 karakter.");
+      }
+      return handle;
+    }
+
+    function normalizeStoredContact(normalizer, value) {
+      try { return normalizer(value); } catch { return ""; }
+    }
+
+    async function syncPublicPhotographerProfile() {
+      const publicId = String(currentPublicId || "").trim();
+      if (!publicId || !auth.currentUser) return;
+
+      const publicProfile = {
+        photographer_id: publicId,
+        photographer_name: currentCustomName || auth.currentUser.displayName || "Fotografer",
+        photo_url: currentCustomPhoto || auth.currentUser.photoURL || "",
+        whatsapp: normalizeStoredContact(normalizeWhatsAppInput, currentWhatsApp),
+        instagram: normalizeStoredContact(normalizeInstagramInput, currentInstagram),
+        updated_at: new Date()
+      };
+      const signature = JSON.stringify([
+        publicProfile.photographer_id,
+        publicProfile.photographer_name,
+        publicProfile.photo_url,
+        publicProfile.whatsapp,
+        publicProfile.instagram
+      ]);
+      if (signature === lastPublicProfileSyncSignature) return;
+
+      try {
+        await setDoc(doc(db, "public_photographers", publicId), publicProfile, { merge: true });
+        lastPublicProfileSyncSignature = signature;
+      } catch (error) {
+        console.warn("Gagal memperbarui profil publik fotografer:", error);
+      }
+    }
+
     document.getElementById("btnEditProfile").addEventListener("click", () => {
       document.getElementById("editDisplayName").value = currentCustomName;
       document.getElementById("editPhotoURL").value = currentCustomPhoto;
+      document.getElementById("editWhatsApp").value = currentWhatsApp;
+      document.getElementById("editInstagram").value = currentInstagram;
+      document.getElementById("profileError").classList.add("hidden");
       document.getElementById("profileModal").classList.remove("hidden");
     });
     document.getElementById("btnCloseProfileModal").addEventListener("click", () => document.getElementById("profileModal").classList.add("hidden"));
@@ -587,11 +785,15 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
             currentQuotaProfile = data;
             currentCustomName = data.custom_name || user.displayName;
             currentCustomPhoto = data.photo_url || user.photoURL;
+            currentWhatsApp = data.whatsapp || "";
+            currentInstagram = data.instagram || "";
             currentPublicId = data.public_id || "";
           } else {
             const initialProfile = {
               custom_name: user.displayName,
               photo_url: user.photoURL,
+              whatsapp: "",
+              instagram: "",
               email: user.email,
               remaining_quota: 500,
               role: "user",
@@ -601,8 +803,12 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
             currentQuotaProfile = initialProfile;
             currentCustomName = user.displayName;
             currentCustomPhoto = user.photoURL;
+            currentWhatsApp = "";
+            currentInstagram = "";
             currentPublicId = "";
           }
+
+          await syncPublicPhotographerProfile();
 
           document.getElementById("userName").textContent = currentCustomName || "Photographer";
           document.getElementById("userEmail").textContent = user.email || "";
@@ -639,10 +845,43 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
 
     document.getElementById("profileForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const nName = document.getElementById("editDisplayName").value.trim();
-      const nPhoto = document.getElementById("editPhotoURL").value.trim() || auth.currentUser.photoURL;
-      await setDoc(doc(db, "users", auth.currentUser.uid), { custom_name: nName, photo_url: nPhoto, updated_at: new Date() }, { merge: true });
-      document.getElementById("profileModal").classList.add("hidden");
+      const errorBox = document.getElementById("profileError");
+      const saveButton = document.querySelector('#profileForm button[type="submit"]');
+      errorBox.classList.add("hidden");
+      saveButton.disabled = true;
+      saveButton.textContent = "Saving...";
+
+      try {
+        if (!auth.currentUser) throw new Error("Sesi login tidak tersedia. Silakan login ulang.");
+
+        const nName = document.getElementById("editDisplayName").value.trim();
+        const nPhoto = document.getElementById("editPhotoURL").value.trim() || auth.currentUser.photoURL || "";
+        const nWhatsApp = normalizeWhatsAppInput(document.getElementById("editWhatsApp").value);
+        const nInstagram = normalizeInstagramInput(document.getElementById("editInstagram").value);
+
+        await setDoc(doc(db, "users", auth.currentUser.uid), {
+          custom_name: nName,
+          photo_url: nPhoto,
+          whatsapp: nWhatsApp,
+          instagram: nInstagram,
+          profile_updated_at: new Date(),
+          updated_at: new Date()
+        }, { merge: true });
+
+        currentCustomName = nName;
+        currentCustomPhoto = nPhoto;
+        currentWhatsApp = nWhatsApp;
+        currentInstagram = nInstagram;
+        await syncPublicPhotographerProfile();
+        document.getElementById("profileModal").classList.add("hidden");
+      } catch (error) {
+        console.error("Failed to save photographer profile:", error);
+        errorBox.textContent = error.message || "Profil gagal disimpan. Periksa koneksi dan Firestore Rules.";
+        errorBox.classList.remove("hidden");
+      } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = "Save Profile";
+      }
     });
 
     function closeAppendModal() {
