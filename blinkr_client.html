@@ -381,13 +381,21 @@
                 </h2>
 
                 <!-- Identitas fotografer dan kanal kontak tampil setelah fotografer dipilih -->
-                <div id="photographer-badge" class="hidden w-full sm:w-auto items-center gap-3 bg-app border border-default px-3 py-2.5 rounded-xl transition">
-                    <img id="photographer-avatar" src="" class="w-9 h-9 rounded-full object-cover shadow-sm shrink-0" alt="Foto fotografer">
-                    <div class="min-w-0 flex-1">
-                        <p id="photographer-display-name" class="text-xs font-bold text-primary leading-tight truncate"></p>
-                        <p class="text-[10px] text-secondary mt-0.5">Photographer</p>
+                <div id="photographer-badge" class="hidden w-full sm:w-auto flex-col sm:flex-row items-stretch sm:items-center gap-3 bg-app border border-default px-3 py-3 sm:py-2.5 rounded-xl transition">
+                    <!-- Baris identitas: tetap horizontal di semua ukuran layar -->
+                    <div class="flex items-center gap-3 min-w-0 w-full sm:w-auto">
+                        <img id="photographer-avatar" src="" class="w-9 h-9 rounded-full object-cover shadow-sm shrink-0" alt="Foto fotografer">
+                        <div class="min-w-0 flex-1">
+                            <p id="photographer-display-name" class="text-xs font-bold text-primary leading-tight truncate"></p>
+                            <p class="text-[10px] text-secondary mt-0.5">Photographer</p>
+                        </div>
                     </div>
-                    <div id="photographer-contact-actions" class="flex flex-wrap items-center gap-1.5 sm:ml-2"></div>
+
+                    <!-- Baris kontak turun ke bawah khusus mobile; kembali sejajar di desktop -->
+                    <div id="photographer-contact-section" class="hidden w-full sm:w-auto sm:ml-2 border-t border-default sm:border-t-0 pt-3 sm:pt-0">
+                        <p class="sm:hidden text-[9px] font-bold tracking-wider text-secondary mb-2">CONTACT PHOTOGRAPHER</p>
+                        <div id="photographer-contact-actions" class="flex w-full sm:w-auto items-center gap-2"></div>
+                    </div>
                 </div>
             </div>
 
@@ -770,6 +778,7 @@
         const badgePhotographer = document.getElementById('photographer-badge');
         const avatarPhotographer = document.getElementById('photographer-avatar');
         const namePhotographer = document.getElementById('photographer-display-name');
+        const photographerContactSection = document.getElementById('photographer-contact-section');
         const photographerContactActions = document.getElementById('photographer-contact-actions');
 
         // Kunci scroll halaman saat salah satu picker terbuka
@@ -1125,6 +1134,7 @@
         function renderPhotographerContact(profile) {
             if (!profile) {
                 photographerContactActions.innerHTML = "";
+                photographerContactSection.classList.add("hidden");
                 return;
             }
 
@@ -1137,7 +1147,7 @@
                 const url = `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`;
                 actions.push(`
                     <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer"
-                       class="inline-flex items-center justify-center gap-1.5 rounded-lg px-2.5 py-2 text-[11px] font-semibold bg-surface-hover border border-default text-primary transition hover:border-active whitespace-nowrap"
+                       class="inline-flex flex-1 sm:flex-none items-center justify-center gap-1.5 rounded-lg px-2.5 py-2 text-[11px] font-semibold bg-surface-hover border border-default text-primary transition hover:border-active whitespace-nowrap"
                        aria-label="Hubungi fotografer melalui WhatsApp">
                         <svg class="w-3.5 h-3.5" style="color:#25D366" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.87 11.87 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.96L.06 24l6.29-1.65a11.88 11.88 0 0 0 5.7 1.45h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.17-3.44-8.42ZM12.06 21.8a9.85 9.85 0 0 1-5.02-1.37l-.36-.21-3.73.98.99-3.64-.24-.37a9.87 9.87 0 0 1-1.52-5.29c0-5.45 4.44-9.89 9.9-9.89a9.8 9.8 0 0 1 6.99 2.9 9.8 9.8 0 0 1 2.9 6.99c0 5.46-4.44 9.9-9.9 9.9Zm5.43-7.41c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.48-.88-.78-1.48-1.75-1.65-2.05-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.08-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.47s1.07 2.87 1.22 3.07c.15.2 2.1 3.2 5.08 4.48.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.08 1.75-.72 2-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35Z"/></svg>
                         WhatsApp
@@ -1148,7 +1158,7 @@
                 const url = `https://www.instagram.com/${encodeURIComponent(instagram)}/`;
                 actions.push(`
                     <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer"
-                       class="inline-flex items-center justify-center gap-1.5 rounded-lg px-2.5 py-2 text-[11px] font-semibold bg-surface-hover border border-default text-primary transition hover:border-active whitespace-nowrap"
+                       class="inline-flex flex-1 sm:flex-none items-center justify-center gap-1.5 rounded-lg px-2.5 py-2 text-[11px] font-semibold bg-surface-hover border border-default text-primary transition hover:border-active whitespace-nowrap"
                        aria-label="Lihat profil Instagram fotografer">
                         <svg class="w-3.5 h-3.5" style="color:#C13584" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/></svg>
                         Instagram
@@ -1156,6 +1166,7 @@
             }
 
             photographerContactActions.innerHTML = actions.join("");
+            photographerContactSection.classList.toggle("hidden", actions.length === 0);
         }
 
         // Logika Saat Fotografer Dipilih
