@@ -636,7 +636,7 @@
       const supportName = currentCustomName || auth.currentUser?.displayName || "Photographer";
       const supportEmail = auth.currentUser?.email || "-";
       const supportMessage = [
-        "Halo tim Blinkr! \u{1F44B}",
+        "Halo tim Blinkr!",
         "",
         "Saya membutuhkan bantuan terkait layanan Blinkr.",
         "",
@@ -667,18 +667,18 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
     auth.currentUser?.email || "-";
 
   const message = [
-  "Halo *Blinkr!* \u{1F44B}\u{1F4F8}",
+  "Halo Blinkr!",
   "",
   "Saya ingin melakukan top up kuota.",
   "",
-  "\u{1F464} *Data Fotografer*",
+  "*Data Fotografer*",
   "",
   `Nama: _${photographerName}_`,
   `Email: _${photographerEmail}_`,
   "",
   "Mohon kirimkan pricelist dan informasi cara pembayarannya.",
   "",
-  "Terima kasih! \u{1F64F}"
+  "Terima kasih!"
 ].join("\n");
 
   openWhatsAppMessage(message);
