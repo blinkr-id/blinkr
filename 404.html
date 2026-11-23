@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blinkr | Find your moment.</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <style>
+    body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box; font-family: 'Lexend', system-ui, -apple-system, sans-serif; background: #F7F8FA; color: #101D38; }
+    .box { max-width: 420px; text-align: center; background: #fff; border: 1px solid #E4E7EC; border-radius: 16px; padding: 40px 28px; box-shadow: 0 4px 12px rgba(16, 29, 56, 0.04); }
+    h1 { font-size: 20px; margin: 0 0 8px; }
+    p { font-size: 14px; color: #667085; line-height: 1.6; margin: 0 0 24px; }
+    a { display: inline-block; background: #FF914D; color: #fff; text-decoration: none; font-weight: 600; font-size: 14px; padding: 12px 22px; border-radius: 12px; }
+    @media (prefers-color-scheme: dark) {
+      body { background: #0B1426; color: #F0F1F5; }
+      .box { background: #101D38; border-color: rgba(255,255,255,0.1); }
+      p { color: #A0AABF; }
+    }
+  </style>
+</head>
+<body>
+  <div class="box" id="notFound" hidden>
+    <h1>Halaman tidak ditemukan</h1>
+    <p>Link yang Anda buka tidak tersedia. Jika ini link fotografer, nama fotografer mungkin sudah diganti. Minta link terbaru kepada fotografer.</p>
+    <a href="./">Kembali ke Blinkr</a>
+  </div>
+
+  <script>
+    // Routing GitHub Pages: /blinkr/<slug-fotografer> -> blinkr_client.html?p=<slug>
+    // Halaman client lalu memilih fotografer dan merapikan alamat kembali menjadi /blinkr/<slug>.
+    (function () {
+      var CLIENT_PAGE = "blinkr_client.html";
+      // Jumlah segmen folder sebelum slug. 1 = blinkr-id.github.io/blinkr/<slug>.
+      // Isi 0 jika nanti memakai custom domain di root (contoh: blinkr.id/<slug>).
+      var BASE_SEGMENTS = 1;
+
+      var parts = location.pathname.split("/").filter(Boolean);
+      var rest = parts.slice(BASE_SEGMENTS);
+      var basePath = "/" + parts.slice(0, BASE_SEGMENTS).join("/") + (BASE_SEGMENTS ? "/" : "");
+
+      // Hanya segmen tunggal huruf/angka/"-" tanpa titik, agar file lain (mis. .js, .png) tetap 404 biasa.
+      if (rest.length === 1 && /^[a-z0-9]+(?:-[a-z0-9]+)*$/i.test(rest[0])) {
+        location.replace(basePath + CLIENT_PAGE + "?p=" + encodeURIComponent(rest[0].toLowerCase()) + location.hash);
+      } else {
+        document.getElementById("notFound").hidden = false;
+      }
+    })();
+  </script>
+</body>
+</html>
