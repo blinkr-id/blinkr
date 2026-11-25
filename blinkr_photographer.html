@@ -203,6 +203,21 @@
       .blinkr-support-chat-copy strong { font-size: 11px; }
     }
 
+  
+
+    /* Top-up package modal */
+    .topup-package-card {
+      width: 100%; display: flex; flex-direction: column; align-items: flex-start;
+      gap: 8px; padding: 18px; text-align: left; color: var(--text-primary);
+      background: var(--bg-surface); border: 1px solid var(--border-default);
+      border-radius: 14px; transition: var(--transition-interaction); cursor: pointer;
+    }
+    .topup-package-card:hover { border-color: var(--brand-orange); transform: translateY(-2px); box-shadow: var(--shadow-card); }
+    .topup-package-card:focus-visible { outline: 3px solid rgba(255, 145, 77, 0.25); outline-offset: 2px; }
+    .topup-package-quota { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.03em; }
+    .topup-package-price { color: var(--brand-orange-hover); font-size: 1.05rem; font-weight: 800; }
+    [data-theme="dark"] .topup-package-price { color: var(--brand-orange); }
+
   </style>
 </head>
 <body class="min-h-screen selection:bg-brand-orange selection:text-white">
@@ -316,6 +331,51 @@
           </table>
         </div>
       </div>
+
+
+      <!-- Event retention notice -->
+      <section class="blinkr-card p-4 sm:p-5 border-info" aria-labelledby="eventRetentionTitle">
+        <div class="flex items-start gap-3">
+          <div class="w-9 h-9 rounded-xl bg-info-subtle text-info flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" stroke-width="1.8" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 11v5m0-8h.01" />
+            </svg>
+          </div>
+          <div class="min-w-0">
+            <h3 id="eventRetentionTitle" class="text-sm font-bold text-primary">Informasi Penyimpanan Event</h3>
+            <p class="text-xs sm:text-sm text-secondary leading-relaxed mt-1">
+              Data event dan database pencarian foto tersedia di Blinkr selama
+              <strong id="eventRetentionDays" class="text-primary">30 hari</strong>
+              sesuai masa penyimpanan yang berlaku. Setelah masa tersebut berakhir, event dan database pencariannya tidak lagi tersedia di Blinkr.
+              Foto asli yang tersimpan di Google Drive tetap menjadi milik Anda dan tidak dihapus oleh Blinkr.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Blinkr Instagram -->
+      <section class="blinkr-card p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" aria-labelledby="blinkrSocialTitle">
+        <div class="flex items-start gap-3 min-w-0">
+          <div class="w-10 h-10 rounded-xl bg-surface-hover border border-default flex items-center justify-center text-primary shrink-0">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none" />
+            </svg>
+          </div>
+          <div class="min-w-0">
+            <h3 id="blinkrSocialTitle" class="text-sm sm:text-base font-bold text-primary">Stay Connected with Blinkr</h3>
+            <p class="text-xs sm:text-sm text-secondary mt-1 leading-relaxed">Ikuti Instagram Blinkr untuk mendapatkan update fitur, informasi, dan cerita seputar dunia fotografi event.</p>
+          </div>
+        </div>
+        <a href="https://www.instagram.com/blinkr.id/" target="_blank" rel="noopener noreferrer"
+          class="btn-secondary inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap shrink-0">
+          @blinkr.id
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17 17 7M7 7h10v10" /></svg>
+        </a>
+      </section>
+
     </main>
   </div>
 
@@ -400,6 +460,7 @@
     </div>
   </div>
 
+
   <!-- Edit Event Name Modal -->
   <div id="editEventModal" class="fixed inset-0 modal-backdrop-custom z-50 flex items-center justify-center p-4 hidden" role="dialog" aria-modal="true" aria-labelledby="editEventModalTitle">
     <div class="modal-content-custom max-w-md w-full p-6 relative">
@@ -465,6 +526,52 @@
     <span id="deleteToastMessage" class="text-sm font-semibold">Event deleted successfully.</span>
   </div>
 
+
+  <!-- Top-up Package Modal -->
+  <div id="topUpModal" class="fixed inset-0 modal-backdrop-custom z-[55] flex items-center justify-center p-4 hidden" role="dialog" aria-modal="true" aria-labelledby="topUpModalTitle">
+    <div class="modal-content-custom max-w-2xl w-full p-5 sm:p-6 relative max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-start gap-4 mb-5 pb-3 border-b border-default">
+        <div>
+          <h3 id="topUpModalTitle" class="text-lg font-bold text-primary">Pilih Kuota Top Up</h3>
+          <p class="text-xs text-secondary mt-1">Pilih jumlah kuota yang ingin kamu beli.</p>
+        </div>
+        <button id="btnCloseTopUpModal" type="button" class="text-tertiary hover:text-primary transition" aria-label="Tutup">✕</button>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <button type="button" class="topup-package-card" data-topup-photos="5000" data-topup-price="10000">
+          <span class="text-[10px] font-bold tracking-wider uppercase text-secondary">Kuota Foto</span>
+          <span class="topup-package-quota">5.000 Foto</span>
+          <span class="topup-package-price">Rp10.000</span>
+          <span class="text-xs font-semibold text-secondary mt-1">Pilih Paket →</span>
+        </button>
+        <button type="button" class="topup-package-card" data-topup-photos="10000" data-topup-price="18000">
+          <span class="text-[10px] font-bold tracking-wider uppercase text-secondary">Kuota Foto</span>
+          <span class="topup-package-quota">10.000 Foto</span>
+          <span class="topup-package-price">Rp18.000</span>
+          <span class="text-xs font-semibold text-secondary mt-1">Pilih Paket →</span>
+        </button>
+        <button type="button" class="topup-package-card" data-topup-photos="20000" data-topup-price="34000">
+          <span class="text-[10px] font-bold tracking-wider uppercase text-secondary">Kuota Foto</span>
+          <span class="topup-package-quota">20.000 Foto</span>
+          <span class="topup-package-price">Rp34.000</span>
+          <span class="text-xs font-semibold text-secondary mt-1">Pilih Paket →</span>
+        </button>
+        <button type="button" class="topup-package-card" data-topup-photos="50000" data-topup-price="80000">
+          <span class="text-[10px] font-bold tracking-wider uppercase text-secondary">Kuota Foto</span>
+          <span class="topup-package-quota">50.000 Foto</span>
+          <span class="topup-package-price">Rp80.000</span>
+          <span class="text-xs font-semibold text-secondary mt-1">Pilih Paket →</span>
+        </button>
+      </div>
+      <div class="mt-4 rounded-xl bg-info-subtle border border-info p-3 text-xs text-info leading-relaxed">
+        Setelah memilih paket, kamu akan diarahkan ke WhatsApp Blinkr untuk konfirmasi dan menerima instruksi pembayaran. Kuota ditambahkan setelah pembayaran diverifikasi oleh admin.
+      </div>
+      <div class="flex justify-end mt-5">
+        <button type="button" id="btnCancelTopUpModal" class="btn-secondary px-5 py-2 rounded-xl font-semibold text-sm">Tutup</button>
+      </div>
+    </div>
+  </div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -480,8 +587,7 @@
     const BLINKR_WHATSAPP_NUMBER = "6285156504345";
 
     // BLINKR CLIENT LINK CONFIGURATION
-    // Alamat dasar halaman Client di GitHub Pages. Wajib diakhiri tanda "/".
-    // Link client fotografer = BLINKR_CLIENT_BASE_URL + slug nama fotografer.
+    // Link client fotografer dibentuk dari base URL ini dan slug nama fotografer.
     const BLINKR_CLIENT_BASE_URL = "https://blinkr-id.github.io/blinkr/";
 
     document.querySelectorAll('.btn-route').forEach(button => {
@@ -560,6 +666,7 @@
     let currentSlugBase = "";
     let slugLoadedForPublicId = "";
     let slugQueue = Promise.resolve();
+    let globalEventRetentionDays = 30;
     let isMasterAccount = false;
     let currentPlan = "FREE";
     let currentQuotaProfile = null;
@@ -597,6 +704,11 @@
 
     function formatQuota(value) {
       return nonNegativeNumber(value).toLocaleString("id-ID");
+    }
+
+    function normalizeRetentionDays(value) {
+      const parsed = Number(value);
+      return Number.isFinite(parsed) && parsed >= 1 ? Math.floor(parsed) : 30;
     }
 
     function getJakartaDateKey() {
@@ -707,39 +819,80 @@
 
     document.getElementById("btnContactSupport").addEventListener("click", openBlinkrSupportChat);
 
-document.getElementById("btnTopUpQuota").addEventListener("click", () => {
+// ===== TOP-UP PACKAGE SELECTION =====
+    const topUpModal = document.getElementById("topUpModal");
 
-  if (!/^\d{8,15}$/.test(BLINKR_WHATSAPP_NUMBER)) {
-    alert("Nomor WhatsApp Blinkr belum diatur.");
-    return;
-  }
+    function closeTopUpModal() {
+      topUpModal.classList.add("hidden");
+    }
 
-  const photographerName =
-    currentCustomName ||
-    auth.currentUser?.displayName ||
-    "Photographer";
+    document.getElementById("btnTopUpQuota").addEventListener("click", () => {
+      if (!auth.currentUser) {
+        alert("Silakan login terlebih dahulu.");
+        return;
+      }
+      topUpModal.classList.remove("hidden");
+    });
 
-  const photographerEmail =
-    auth.currentUser?.email || "-";
+    document.getElementById("btnCloseTopUpModal").addEventListener("click", closeTopUpModal);
+    document.getElementById("btnCancelTopUpModal").addEventListener("click", closeTopUpModal);
+    topUpModal.addEventListener("click", (event) => {
+      if (event.target === topUpModal) closeTopUpModal();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !topUpModal.classList.contains("hidden")) closeTopUpModal();
+    });
 
-  const message = [
-  "Halo *Blinkr*!",
-  "",
-  "Saya ingin melakukan top up kuota.",
-  "",
-  "*Data Fotografer*",
-  "",
-  `Nama: _${photographerName}_`,
-  `Email: _${photographerEmail}_`,
-  "",
-  "Mohon kirimkan pricelist dan informasi cara pembayarannya.",
-  "",
-  "Terima kasih!"
-].join("\n");
+    function formatTopUpNumber(value) {
+      return Number(value).toLocaleString("id-ID");
+    }
 
-  openWhatsAppMessage(message);
+    function sendTopUpRequest(photoCount, price) {
+      if (!/^\d{8,15}$/.test(BLINKR_WHATSAPP_NUMBER)) {
+        alert("Nomor WhatsApp Blinkr belum diatur.");
+        return;
+      }
+      if (!auth.currentUser) {
+        alert("Silakan login terlebih dahulu.");
+        return;
+      }
 
-});
+      const photographerName = currentCustomName || auth.currentUser.displayName || "Photographer";
+      const photographerEmail = auth.currentUser.email || "-";
+      const message = [
+        "Halo tim Blinkr!",
+        "",
+        "Saya ingin melakukan top up kuota.",
+        "",
+        "*Detail Paket*",
+        `Kuota: ${formatTopUpNumber(photoCount)} foto`,
+        `Harga: Rp${formatTopUpNumber(price)}`,
+        "",
+        "*Data Fotografer*",
+        `Nama: ${photographerName}`,
+        `Email: ${photographerEmail}`,
+        "",
+        "Mohon kirimkan QRIS atau instruksi pembayaran untuk paket tersebut.",
+        "Saya memahami kuota akan ditambahkan setelah pembayaran diverifikasi.",
+        "",
+        "Terima kasih!"
+      ].join("\n");
+      closeTopUpModal();
+      openWhatsAppMessage(message);
+    }
+
+    document.querySelectorAll("[data-topup-photos][data-topup-price]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const photos = Number(button.dataset.topupPhotos);
+        const price = Number(button.dataset.topupPrice);
+        if (!Number.isFinite(photos) || !Number.isFinite(price) || photos <= 0 || price <= 0) {
+          alert("Paket kuota tidak valid. Silakan muat ulang halaman.");
+          return;
+        }
+        sendTopUpRequest(photos, price);
+      });
+    });
+
     document.getElementById("btnCloseModal").addEventListener("click", () => document.getElementById("eventModal").classList.add("hidden"));
     document.getElementById("btnCancelModal").addEventListener("click", () => document.getElementById("eventModal").classList.add("hidden"));
 
@@ -783,10 +936,10 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
 
     function slugifyPhotographerName(value) {
       const slug = String(value || "")
-        .normalize("NFKD").replace(/[\u0300-\u036f]/g, "")   // buang aksen
+        .normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
         .toLowerCase()
-        .replace(/['’`´]/g, "")                                // apostrof dibuang, bukan jadi "-"
-        .replace(/[^a-z0-9]+/g, "-")                           // spasi & karakter khusus -> "-"
+        .replace(/['’`´]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-+|-+$/g, "")
         .slice(0, 40)
         .replace(/-+$/g, "");
@@ -829,8 +982,6 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
       preview.textContent = displayClientUrl(slug);
     }
 
-    // Mengklaim slug lewat transaksi agar dua fotografer tidak bisa memakai slug yang sama.
-    // Slug lama milik akun ini dilepas dalam transaksi yang sama.
     async function claimSlug(candidate, oldSlug) {
       const uid = auth.currentUser.uid;
       const newRef = doc(db, "public_slugs", candidate);
@@ -864,8 +1015,6 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
           currentSlugBase = String(existingData.slug_base || "");
           slugLoadedForPublicId = publicId;
         }
-
-        // Slug sudah sesuai dengan nama saat ini: tidak perlu diubah.
         if (currentPublicSlug && currentSlugBase === base) {
           renderClientLink();
           return { ok: true, slug: currentPublicSlug, base };
@@ -879,7 +1028,6 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
           }
         }
         if (!claimed) throw new Error("Tidak menemukan slug yang tersedia.");
-
         currentPublicSlug = claimed;
         currentSlugBase = base;
         renderClientLink();
@@ -890,7 +1038,6 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
       }
     }
 
-    // Serialisasi: snapshot profil dan tombol Save Profile tidak boleh mengklaim slug bersamaan.
     function ensurePhotographerSlug() {
       const run = slugQueue.then(doEnsurePhotographerSlug, doEnsurePhotographerSlug);
       slugQueue = run.catch(() => {});
@@ -902,7 +1049,6 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
       if (!publicId || !auth.currentUser) return true;
 
       const slugResult = await ensurePhotographerSlug();
-
       const publicProfile = {
         photographer_id: publicId,
         photographer_name: currentCustomName || auth.currentUser.displayName || "Fotografer",
@@ -927,7 +1073,6 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
 
       try {
         await setDoc(doc(db, "public_photographers", publicId), publicProfile, { merge: true });
-        // Signature hanya disimpan jika slug juga sukses, supaya percobaan berikutnya mengulang.
         if (slugResult.ok) lastPublicProfileSyncSignature = signature;
         return slugResult.ok;
       } catch (error) {
@@ -1156,11 +1301,17 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
           (settingsSnap) => {
             const settingsData = settingsSnap.exists() ? settingsSnap.data() : {};
             globalFreeDailyLimit = nonNegativeNumber(settingsData.free_daily_limit, 500);
+            globalEventRetentionDays = normalizeRetentionDays(settingsData.event_retention_days);
+            const retentionDaysLabel = document.getElementById("eventRetentionDays");
+            if (retentionDaysLabel) retentionDaysLabel.textContent = `${formatQuota(globalEventRetentionDays)} hari`;
             renderQuotaDisplay();
           },
           (error) => {
-            console.warn("Tidak dapat membaca settings/quota; memakai fallback 500:", error);
+            console.warn("Tidak dapat membaca settings/quota; memakai fallback pengaturan:", error);
             globalFreeDailyLimit = 500;
+            globalEventRetentionDays = 30;
+            const retentionDaysLabel = document.getElementById("eventRetentionDays");
+            if (retentionDaysLabel) retentionDaysLabel.textContent = "30 hari";
             renderQuotaDisplay();
           }
         );
@@ -1580,7 +1731,6 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
         || batches.some(batch => !["Append_Selesai", "Gagal"].includes(String(batch.status || "")));
     }
 
-    // Nama event hanya bisa diubah setelah event selesai diproses dan tidak ada batch aktif.
     function canEditEventName(ev) {
       return ev.status === "Selesai" && !isEventLocked(ev);
     }
@@ -1627,7 +1777,6 @@ document.getElementById("btnTopUpQuota").addEventListener("click", () => {
               </div>
             </td>
           </tr>`;
-
         if (isCollapsed) return;
 
         group.events.forEach(ev => {
@@ -1864,9 +2013,10 @@ document.getElementById("sortCountBtn").addEventListener("click", () => {
     });
 
 
+
     // ===== EDIT EVENT NAME =====
-    // Hanya mengubah nama tampilan (event_name). ID dokumen, ID antrean, json_filename,
-    // relasi database, dan foto yang sudah diproses sengaja tidak disentuh.
+    // Hanya mengubah nama tampilan (event_name). ID dokumen, antrean, database JSON,
+    // relasi event, dan foto yang sudah diproses tidak disentuh.
     let pendingEditEventId = null;
     let editEventInProgress = false;
     const EVENT_NAME_MAX_LENGTH = 100;
@@ -1949,16 +2099,12 @@ document.getElementById("sortCountBtn").addEventListener("click", () => {
       saveBtn.textContent = "Saving...";
 
       try {
-        if (!auth.currentUser || !auth.currentUser.email) {
-          throw new Error("Sesi login tidak tersedia. Silakan login ulang.");
-        }
-
+        if (!auth.currentUser || !auth.currentUser.email) throw new Error("Sesi login tidak tersedia. Silakan login ulang.");
         const parentRef = doc(db, "queues", docId);
         const parentSnap = await getDoc(parentRef);
         if (!parentSnap.exists()) throw new Error("Event sudah tidak ditemukan.");
         const latestEvent = parentSnap.data() || {};
 
-        // Ambil batch tambahan terbaru milik akun ini (sama seperti alur hapus event).
         const ownerQueues = await getDocs(query(
           collection(db, "queues"),
           where("photographer_email", "==", auth.currentUser.email)
@@ -1967,7 +2113,6 @@ document.getElementById("sortCountBtn").addEventListener("click", () => {
           const data = queueDoc.data() || {};
           return data.task_type === "append_batch" && data.parent_event_id === docId;
         });
-
         const blockedBatch = relatedBatchDocs.find(queueDoc =>
           !["Append_Selesai", "Gagal"].includes(String((queueDoc.data() || {}).status || ""))
         );
@@ -1979,14 +2124,8 @@ document.getElementById("sortCountBtn").addEventListener("click", () => {
           throw new Error("Nama event hanya bisa diubah setelah event selesai diproses dan tidak ada batch tambahan yang menunggu/diproses.");
         }
 
-        // Katalog publik hanya ada jika event sudah dipublikasikan.
         const publicRef = doc(db, "public_events", docId);
         const publicSnap = await getDoc(publicRef);
-
-        // Satu writeBatch = semua berubah atau tidak sama sekali, sehingga nama di
-        // dashboard fotografer dan halaman Client selalu sinkron.
-        // Hanya field event_name yang ditulis; updated_at di public_events sengaja
-        // tidak diubah karena dipakai Client sebagai versi cache database JSON.
         const writeBatchRef = writeBatch(db);
         writeBatchRef.update(parentRef, { event_name: newName });
         relatedBatchDocs.forEach(batchDoc => writeBatchRef.update(batchDoc.ref, { event_name: newName }));
