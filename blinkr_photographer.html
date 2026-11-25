@@ -604,7 +604,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc, query, where, onSnapshot, doc, setDoc, getDoc, getDocs, writeBatch, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, query, where, onSnapshot, doc, setDoc, getDoc, getDocs, writeBatch, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
     const BLINKR_ROUTES = {
@@ -1645,7 +1645,7 @@
           gdrive_folder_id: folderId,
           append_source_type: sourceType,
           status: "Pending",
-          created_at: new Date()
+          created_at: serverTimestamp()
         });
         closeAppendModal();
         alert("Antrean berhasil ditambahkan!");
@@ -1672,7 +1672,7 @@
         event_date: document.getElementById("eventDate").value,
         gdrive_folder_id: folderId,
         status: "Pending",
-        created_at: new Date()
+        created_at: serverTimestamp()
       });
       document.getElementById("eventModal").classList.add("hidden");
       document.getElementById("eventForm").reset();
