@@ -676,7 +676,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc, query, where, onSnapshot, doc, setDoc, getDoc, getDocs, writeBatch, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, query, where, onSnapshot, doc, setDoc, getDoc, getDocs, writeBatch, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
     const BLINKR_ROUTES = {
@@ -1717,7 +1717,7 @@
           gdrive_folder_id: folderId,
           append_source_type: sourceType,
           status: "Pending",
-          created_at: new Date()
+          created_at: serverTimestamp()
         });
         closeAppendModal();
         alert("Antrean berhasil ditambahkan!");
@@ -1735,19 +1735,34 @@
       if (!isMasterAccount && currentQuota <= 0) return alert("Kuota habis. Periksa saldo kuota harian atau kuota pembelian.");
       const folderId = extractFolderId(document.getElementById("gdriveUrl").value.trim());
       if (!folderId) return alert("Link Drive tidak valid!");
-      await addDoc(collection(db, "queues"), {
-        photographer_name: currentCustomName || auth.currentUser.displayName,
-        photographer_email: auth.currentUser.email,
-        photographer_uid: auth.currentUser.uid,
-        task_type: "event",
-        event_name: document.getElementById("eventName").value.trim(),
-        event_date: document.getElementById("eventDate").value,
-        gdrive_folder_id: folderId,
-        status: "Pending",
-        created_at: new Date()
-      });
-      document.getElementById("eventModal").classList.add("hidden");
-      document.getElementById("eventForm").reset();
+
+      const eventForm = e.currentTarget;
+      const submitButton = eventForm.querySelector('button[type="submit"]');
+      const originalButtonText = submitButton.textContent;
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending...";
+
+      try {
+        await addDoc(collection(db, "queues"), {
+          photographer_name: currentCustomName || auth.currentUser.displayName,
+          photographer_email: auth.currentUser.email,
+          photographer_uid: auth.currentUser.uid,
+          task_type: "event",
+          event_name: document.getElementById("eventName").value.trim(),
+          event_date: document.getElementById("eventDate").value,
+          gdrive_folder_id: folderId,
+          status: "Pending",
+          created_at: serverTimestamp()
+        });
+        document.getElementById("eventModal").classList.add("hidden");
+        eventForm.reset();
+      } catch (err) {
+        console.error("Gagal mengirim event ke antrean Blinkr:", err);
+        alert(`Gagal mengirim event: ${err?.message || "Terjadi kesalahan yang tidak diketahui."}`);
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+      }
     });
 
     function escapeHtml(val) {
