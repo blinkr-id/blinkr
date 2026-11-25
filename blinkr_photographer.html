@@ -203,7 +203,45 @@
       .blinkr-support-chat-copy strong { font-size: 11px; }
     }
 
-  
+    /* Instagram bubble: stacked directly above Contact Support. */
+    .blinkr-instagram-bubble {
+      bottom: 90px;
+      z-index: 44;
+      text-decoration: none;
+      border-color: rgba(225, 48, 108, 0.2);
+    }
+    .blinkr-instagram-bubble .blinkr-support-chat-icon {
+      background: linear-gradient(135deg, #833AB4 0%, #E1306C 58%, #FCAF45 100%);
+    }
+    .blinkr-instagram-bubble:focus-visible {
+      outline: 3px solid rgba(225, 48, 108, 0.28);
+      outline-offset: 3px;
+    }
+    [data-theme="dark"] .blinkr-instagram-bubble {
+      background: #101D38;
+      border-color: rgba(225, 48, 108, 0.32);
+    }
+    .event-retention-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 2px 2px 0;
+      color: var(--text-tertiary);
+      font-size: 10px;
+      line-height: 1.55;
+    }
+    .event-retention-note svg {
+      width: 14px;
+      height: 14px;
+      flex: 0 0 14px;
+      margin-top: 1px;
+      color: var(--text-tertiary);
+    }
+    .event-retention-note strong { color: var(--text-secondary); font-weight: 700; }
+    @media (max-width: 480px) {
+      .blinkr-instagram-bubble { bottom: 78px; }
+      .event-retention-note { font-size: 9px; }
+    }
 
     /* Top-up package modal */
     .topup-package-card {
@@ -333,51 +371,42 @@
       </div>
 
 
-      <!-- Event retention notice -->
-      <section class="blinkr-card p-4 sm:p-5 border-info" aria-labelledby="eventRetentionTitle">
-        <div class="flex items-start gap-3">
-          <div class="w-9 h-9 rounded-xl bg-info-subtle text-info flex items-center justify-center shrink-0">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="12" cy="12" r="9" stroke-width="1.8" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 11v5m0-8h.01" />
-            </svg>
-          </div>
-          <div class="min-w-0">
-            <h3 id="eventRetentionTitle" class="text-sm font-bold text-primary">Informasi Penyimpanan Event</h3>
-            <p class="text-xs sm:text-sm text-secondary leading-relaxed mt-1">
-              Data event dan database pencarian foto tersedia di Blinkr selama
-              <strong id="eventRetentionDays" class="text-primary">30 hari</strong>
-              sesuai masa penyimpanan yang berlaku. Setelah masa tersebut berakhir, event dan database pencariannya tidak lagi tersedia di Blinkr.
-              Foto asli yang tersimpan di Google Drive tetap menjadi milik Anda dan tidak dihapus oleh Blinkr.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Blinkr Instagram -->
-      <section class="blinkr-card p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" aria-labelledby="blinkrSocialTitle">
-        <div class="flex items-start gap-3 min-w-0">
-          <div class="w-10 h-10 rounded-xl bg-surface-hover border border-default flex items-center justify-center text-primary shrink-0">
-            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-              <rect x="3" y="3" width="18" height="18" rx="5" />
-              <circle cx="12" cy="12" r="4" />
-              <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none" />
-            </svg>
-          </div>
-          <div class="min-w-0">
-            <h3 id="blinkrSocialTitle" class="text-sm sm:text-base font-bold text-primary">Stay Connected with Blinkr</h3>
-            <p class="text-xs sm:text-sm text-secondary mt-1 leading-relaxed">Ikuti Instagram Blinkr untuk mendapatkan update fitur, informasi, dan cerita seputar dunia fotografi event.</p>
-          </div>
-        </div>
-        <a href="https://www.instagram.com/blinkr.id/" target="_blank" rel="noopener noreferrer"
-          class="btn-secondary inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap shrink-0">
-          @blinkr.id
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17 17 7M7 7h10v10" /></svg>
-        </a>
-      </section>
+      <!-- Compact event retention notice; value is read live from settings/quota. -->
+      <div class="event-retention-note" role="note" aria-label="Informasi masa simpan event">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" />
+          <path stroke-linecap="round" d="M12 11v5m0-8h.01" />
+        </svg>
+        <p>
+          Event dan database pencarian tersedia selama <strong id="eventRetentionDays">30 hari</strong> sesuai pengaturan admin. Setelah masa tersebut, keduanya tidak lagi tersedia di Blinkr. Foto asli di Google Drive tetap aman dan tidak dihapus oleh Blinkr.
+        </p>
+      </div>
 
     </main>
   </div>
+
+  <!-- Floating Instagram bubble, stacked above Contact Support -->
+  <a
+    id="btnStayConnected"
+    class="blinkr-support-chat blinkr-instagram-bubble"
+    href="https://www.instagram.com/blinkr.id/"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Follow Blinkr on Instagram"
+    title="Stay Connected with Blinkr"
+  >
+    <span class="blinkr-support-chat-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <rect x="3" y="3" width="18" height="18" rx="5" />
+        <circle cx="12" cy="12" r="4" />
+        <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none" />
+      </svg>
+    </span>
+    <span class="blinkr-support-chat-copy">
+      <span>Instagram Blinkr</span>
+      <strong>Stay Connected</strong>
+    </span>
+  </a>
 
   <!-- Floating Contact Support bubble -->
   <button type="button" id="btnContactSupport" class="blinkr-support-chat" aria-label="Contact Blinkr Support via WhatsApp" title="Contact Blinkr Support">
@@ -667,6 +696,9 @@
     let slugLoadedForPublicId = "";
     let slugQueue = Promise.resolve();
     let globalEventRetentionDays = 30;
+    let eventRetentionSettingsLoaded = false;
+    let allUserEventDocs = [];
+    let userEventsSnapshotLoaded = false;
     let isMasterAccount = false;
     let currentPlan = "FREE";
     let currentQuotaProfile = null;
@@ -710,6 +742,68 @@
       const parsed = Number(value);
       return Number.isFinite(parsed) && parsed >= 1 ? Math.floor(parsed) : 30;
     }
+
+    // Queue created_at is the event's retention start time. Legacy documents
+    // without a readable created_at are kept visible rather than hidden by guesswork.
+    function getEventCreatedAtMs(eventData) {
+      const value = eventData && eventData.created_at;
+      if (value == null) return null;
+
+      try {
+        if (typeof value.toDate === "function") {
+          const date = value.toDate();
+          const time = date instanceof Date ? date.getTime() : NaN;
+          return Number.isFinite(time) ? time : null;
+        }
+        if (value instanceof Date) {
+          const time = value.getTime();
+          return Number.isFinite(time) ? time : null;
+        }
+        if (typeof value === "number") {
+          return Number.isFinite(value) ? value : null;
+        }
+        if (typeof value === "string" && value.trim()) {
+          const time = Date.parse(value);
+          return Number.isFinite(time) ? time : null;
+        }
+        if (typeof value.seconds === "number") {
+          const nanos = typeof value.nanoseconds === "number" ? value.nanoseconds : 0;
+          return value.seconds * 1000 + Math.floor(nanos / 1e6);
+        }
+      } catch (error) {
+        console.warn("Tidak dapat membaca created_at event:", error);
+      }
+      return null;
+    }
+
+    function isEventWithinRetention(eventData) {
+      // Fail open if settings/quota cannot be read; do not hide events using a guessed limit.
+      if (!eventRetentionSettingsLoaded) return true;
+
+      const createdAtMs = getEventCreatedAtMs(eventData);
+      if (createdAtMs === null) return true;
+
+      const retentionMs = globalEventRetentionDays * 24 * 60 * 60 * 1000;
+      const ageMs = Date.now() - createdAtMs;
+      return ageMs < retentionMs;
+    }
+
+    function refreshVisibleUserEvents() {
+      if (!userEventsSnapshotLoaded) return;
+
+      const visibleEvents = allUserEventDocs.filter(isEventWithinRetention);
+      currentEventDocs = visibleEvents;
+      userEventsById = Object.fromEntries(visibleEvents.map(eventData => [eventData.id, eventData]));
+
+      document.getElementById("statTotal").textContent = visibleEvents.length;
+      document.getElementById("statSelesai").textContent = visibleEvents.filter(eventData => eventData.status === "Selesai").length;
+      renderEventTable(currentEventDocs);
+    }
+
+    // Re-check periodically so an event also disappears while the portal tab stays open.
+    window.setInterval(() => {
+      if (eventRetentionSettingsLoaded && userEventsSnapshotLoaded) refreshVisibleUserEvents();
+    }, 60 * 1000);
 
     function getJakartaDateKey() {
       const parts = new Intl.DateTimeFormat("en-CA", {
@@ -1302,17 +1396,21 @@
             const settingsData = settingsSnap.exists() ? settingsSnap.data() : {};
             globalFreeDailyLimit = nonNegativeNumber(settingsData.free_daily_limit, 500);
             globalEventRetentionDays = normalizeRetentionDays(settingsData.event_retention_days);
+            eventRetentionSettingsLoaded = true;
             const retentionDaysLabel = document.getElementById("eventRetentionDays");
             if (retentionDaysLabel) retentionDaysLabel.textContent = `${formatQuota(globalEventRetentionDays)} hari`;
             renderQuotaDisplay();
+            refreshVisibleUserEvents();
           },
           (error) => {
-            console.warn("Tidak dapat membaca settings/quota; memakai fallback pengaturan:", error);
+            console.warn("Tidak dapat membaca settings/quota; penyaringan retensi event dinonaktifkan sampai pengaturan berhasil dibaca:", error);
             globalFreeDailyLimit = 500;
             globalEventRetentionDays = 30;
+            eventRetentionSettingsLoaded = false;
             const retentionDaysLabel = document.getElementById("eventRetentionDays");
-            if (retentionDaysLabel) retentionDaysLabel.textContent = "30 hari";
+            if (retentionDaysLabel) retentionDaysLabel.textContent = "belum tersedia";
             renderQuotaDisplay();
+            refreshVisibleUserEvents();
           }
         );
 
@@ -1373,6 +1471,11 @@
         userSnapshotUnsubscribe = null;
         globalQuotaSettingsUnsubscribe = null;
         currentQuotaProfile = null;
+        eventRetentionSettingsLoaded = false;
+        allUserEventDocs = [];
+        userEventsSnapshotLoaded = false;
+        currentEventDocs = [];
+        userEventsById = {};
         currentPublicSlug = "";
         currentSlugBase = "";
         slugLoadedForPublicId = "";
@@ -1854,18 +1957,15 @@ document.getElementById("sortCountBtn").addEventListener("click", () => {
         snapshot.forEach(d => allDocs.push({ id: d.id, ...d.data() }));
 
         const appendTasks = allDocs.filter(d => d.task_type === "append_batch");
-        const eventDocs = allDocs.filter(d => d.task_type !== "append_batch" && !d.parent_event_id);
-        userEventsById = Object.fromEntries(eventDocs.map(ev => [ev.id, ev]));
+        allUserEventDocs = allDocs.filter(d => d.task_type !== "append_batch" && !d.parent_event_id);
         appendTasksByParent = {};
         appendTasks.forEach(b => {
           if (!appendTasksByParent[b.parent_event_id]) appendTasksByParent[b.parent_event_id] = [];
           appendTasksByParent[b.parent_event_id].push(b);
         });
 
-        currentEventDocs = eventDocs;
-        document.getElementById("statTotal").textContent = eventDocs.length;
-        document.getElementById("statSelesai").textContent = eventDocs.filter(d => d.status === "Selesai").length;
-        renderEventTable(currentEventDocs);
+        userEventsSnapshotLoaded = true;
+        refreshVisibleUserEvents();
       }, (error) => {
         console.error("Failed to load events:", error);
         document.getElementById("eventListTable").innerHTML = `<tr><td colspan="6" class="py-12 text-center text-danger">Failed to load events. Please refresh the page.</td></tr>`;
