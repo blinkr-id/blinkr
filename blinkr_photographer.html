@@ -82,6 +82,60 @@
     .bg-warning-subtle { background-color: var(--bg-warning-subtle); }
     .bg-danger-subtle { background-color: var(--bg-danger-subtle); }
     .bg-info-subtle { background-color: var(--bg-info-subtle); }
+    /* Photographer account status */
+.account-status-banner {
+  width: calc(100% - 2rem);
+  max-width: 1472px;
+  margin: 16px auto 0;
+  padding: 15px 17px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.account-status-banner.warning {
+  background: var(--bg-warning-subtle);
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.account-status-banner.danger {
+  background: var(--bg-danger-subtle);
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.account-status-banner.info {
+  background: var(--bg-info-subtle);
+  border-color: rgba(59, 130, 246, 0.35);
+}
+
+.account-status-banner-title {
+  display: block;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.account-status-banner-description {
+  margin-top: 4px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.account-status-banner-note {
+  margin-top: 7px;
+  font-size: 11px;
+  line-height: 1.5;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.form-control:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
     .border-warning { border-color: rgba(245, 158, 11, 0.3); }
     .border-danger { border-color: rgba(239, 68, 68, 0.3); }
     .border-info { border-color: rgba(59, 130, 246, 0.3); }
@@ -318,6 +372,85 @@
     .topup-package-price { color: var(--brand-orange-hover); font-size: 1.05rem; font-weight: 800; }
     [data-theme="dark"] .topup-package-price { color: var(--brand-orange); }
 
+  
+
+    /* Photo Summary: three clear metrics per event. */
+    .photo-summary-grid { display: grid; grid-template-columns: repeat(3, minmax(72px, 1fr)); gap: 8px; min-width: 260px; }
+    .photo-summary-item { display: flex; flex-direction: column; gap: 3px; }
+    .photo-summary-value { font-size: 13px; line-height: 1.25; font-weight: 800; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+    .photo-summary-label { font-size: 9px; line-height: 1.25; color: var(--text-secondary); white-space: normal; }
+    .photo-summary-item.success .photo-summary-value { color: var(--color-success); }
+    .photo-summary-item.failed .photo-summary-value { color: var(--color-danger); }
+    .photo-summary-pending { color: var(--text-tertiary); font-size: 10px; margin-top: 4px; }
+
+    /* Notification Center */
+    .notification-bell { position: relative; width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--border-default); border-radius: 999px; background: var(--bg-surface-hover); color: var(--icon-color); cursor: pointer; transition: var(--transition-interaction); flex: 0 0 auto; }
+    .notification-bell:hover { border-color: var(--border-active); }
+    .notification-bell svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+    .notification-count { position: absolute; top: -4px; right: -4px; min-width: 17px; height: 17px; padding: 0 4px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; background: #EF4444; color: white; border: 2px solid var(--bg-surface); font-size: 9px; font-weight: 800; }
+    .notification-count.hidden { display: none; }
+    .notification-dropdown { position: fixed; z-index: 95; top: 76px; right: 18px; width: min(390px, calc(100vw - 24px)); max-height: min(560px, calc(100dvh - 92px)); overflow: hidden; display: flex; flex-direction: column; background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: 16px; box-shadow: var(--shadow-modal); }
+    .notification-dropdown.hidden { display: none; }
+    .notification-dropdown-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 16px; border-bottom: 1px solid var(--border-default); }
+    .notification-list { overflow-y: auto; overscroll-behavior: contain; }
+    .notification-item { width: 100%; display: flex; gap: 10px; text-align: left; padding: 13px 16px; border: 0; border-bottom: 1px solid var(--border-default); background: transparent; color: var(--text-primary); cursor: pointer; }
+    .notification-item:hover { background: var(--bg-surface-hover); }
+    .notification-item.unread { background: var(--bg-info-subtle); }
+    .notification-item-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--brand-orange); flex: 0 0 7px; margin-top: 6px; }
+    .notification-item-dot.read { background: transparent; border: 1px solid var(--border-default); }
+    .notification-item-title { display: block; font-size: 12px; font-weight: 700; line-height: 1.4; }
+    .notification-item-body {
+      display: block;
+      max-height: 2.9em;
+      overflow: hidden;
+      margin-top: 3px;
+      color: var(--text-secondary);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+    .notification-item-time { display: block; margin-top: 5px; color: var(--text-tertiary); font-size: 9px; }
+    .notification-empty { padding: 28px 18px; color: var(--text-secondary); font-size: 12px; text-align: center; }
+    .notification-footer { display: flex; justify-content: space-between; gap: 12px; padding: 12px 16px; border-top: 1px solid var(--border-default); }
+    .notification-link-button { color: var(--brand-orange-hover); font-size: 11px; font-weight: 700; background: none; border: 0; cursor: pointer; }
+    [data-theme="dark"] .notification-link-button { color: var(--brand-orange); }
+    .notification-modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 16px; background: var(--modal-overlay); backdrop-filter: blur(4px); }
+    .notification-modal.hidden { display: none; }
+    .notification-modal-card { width: min(720px, 100%); max-height: min(820px, calc(100dvh - 32px)); display: flex; flex-direction: column; overflow: hidden; background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: 18px; box-shadow: var(--shadow-modal); }
+    .notification-modal-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 18px 20px; border-bottom: 1px solid var(--border-default); }
+    .notification-filters { display: flex; gap: 7px; padding: 12px 16px; border-bottom: 1px solid var(--border-default); }
+    .notification-filter { padding: 7px 11px; border: 1px solid var(--border-default); border-radius: 999px; background: var(--bg-surface-hover); color: var(--text-secondary); font-size: 10px; font-weight: 700; cursor: pointer; }
+    .notification-filter.active { border-color: var(--brand-orange); color: var(--text-primary); background: rgba(255,145,77,.12); }
+    .notification-modal-list { overflow-y: auto; padding: 4px 0; }
+    .notification-detail { padding: 22px; overflow-y: auto; }
+    .notification-detail-body { white-space: pre-wrap; overflow-wrap: anywhere; color: var(--text-secondary); font-size: 13px; line-height: 1.7; margin-top: 14px; display: flex; flex-direction: column; gap: 13px; }
+    .notification-body-paragraph { margin: 0; }
+    .notification-purchase-details { padding: 13px 15px; border: 1px solid var(--border-default); border-radius: 12px; background: var(--bg-surface-hover); }
+    .notification-purchase-heading { margin-bottom: 7px; color: var(--text-secondary); font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .notification-purchase-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding: 8px 0; border-bottom: 1px solid var(--border-default); }
+    .notification-purchase-row:last-child { border-bottom: 0; padding-bottom: 1px; }
+    .notification-purchase-label { color: var(--text-secondary); font-size: 11px; }
+    .notification-purchase-value { color: var(--text-primary); font-size: 12px; font-weight: 750; text-align: right; overflow-wrap: anywhere; }
+    .notification-detail-action { display: inline-flex; margin-top: 18px; padding: 10px 14px; border-radius: 10px; background: var(--brand-orange); color: white; font-size: 11px; font-weight: 700; text-decoration: none; }
+    .notification-toast-stack { position: fixed; z-index: 99; top: 82px; right: 18px; width: min(390px, calc(100vw - 36px)); display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+    .notification-toast { display: flex; align-items: flex-start; gap: 10px; padding: 13px 14px; border: 1px solid var(--border-default); border-left: 4px solid var(--brand-orange); border-radius: 14px; background: var(--bg-surface); color: var(--text-primary); box-shadow: var(--shadow-modal); pointer-events: auto; opacity: 0; transform: translateX(22px); transition: opacity .22s ease, transform .22s ease; }
+    .notification-toast.show { opacity: 1; transform: translateX(0); }
+    .notification-toast.important { border-left-color: #F59E0B; }
+    .notification-toast.critical { border-left-color: #EF4444; }
+    .notification-toast-content { min-width: 0; flex: 1; cursor: pointer; }
+    .notification-toast-title { font-size: 12px; font-weight: 800; line-height: 1.4; }
+    .notification-toast-body { margin-top: 3px; color: var(--text-secondary); font-size: 11px; line-height: 1.5; overflow-wrap: anywhere; }
+    .notification-toast-close { width: 26px; height: 26px; border: 0; border-radius: 8px; background: var(--bg-surface-hover); color: var(--text-secondary); cursor: pointer; flex: 0 0 auto; }
+    @media (max-width: 640px) {
+      .notification-dropdown { top: 72px; right: 10px; width: calc(100vw - 20px); }
+      .notification-toast-stack { top: 76px; left: 10px; right: 10px; width: auto; }
+      .notification-toast { padding: 12px; }
+      .notification-modal { padding: 8px; align-items: flex-end; }
+      .notification-modal-card { max-height: calc(100dvh - 16px); border-radius: 18px 18px 12px 12px; }
+      .photo-summary-grid { min-width: 245px; gap: 6px; }
+      .photo-summary-value { font-size: 12px; }
+      .photo-summary-label { font-size: 8px; }
+    }
+
   </style>
 </head>
 <body class="min-h-screen selection:bg-brand-orange selection:text-white">
@@ -345,7 +478,11 @@
           </a>
           <span class="text-xs font-semibold text-secondary px-3 py-1 rounded-full bg-surface-hover border border-default hidden sm:block">Photographer Portal</span>
         </div>
-        <div class="flex items-center gap-3 sm:gap-4">
+        <div class="flex items-center gap-2 sm:gap-4">
+          <button type="button" id="notificationBellBtn" class="notification-bell" aria-label="Buka notifikasi" aria-expanded="false" title="Notifikasi">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
+            <span id="notificationUnreadCount" class="notification-count hidden">0</span>
+          </button>
           <button id="themeToggleBtn" class="theme-toggle" title="Toggle Theme"></button>
           <div id="btnEditProfile" class="flex min-w-0 max-w-[180px] sm:max-w-[250px] items-center gap-2 bg-app hover:bg-surface-hover px-2.5 py-1.5 rounded-full border border-default cursor-pointer transition">
             <img id="userAvatar" src="https://via.placeholder.com/40" alt="Avatar" class="w-9 h-9 rounded-full object-cover shrink-0">
@@ -357,6 +494,63 @@
         </div>
       </div>
     </header>
+    <!-- PHOTOGRAPHER ACCOUNT STATUS -->
+    <section
+      id="accountStatusBanner"
+      class="account-status-banner hidden"
+      role="status"
+      aria-live="polite"
+    >
+      <div class="min-w-0">
+        <strong
+          id="accountStatusTitle"
+          class="account-status-banner-title"
+        >
+          Memeriksa status akun...
+        </strong>
+
+        <p
+          id="accountStatusDescription"
+          class="account-status-banner-description"
+        >
+          Mohon tunggu sementara Blinkr memverifikasi akun kamu.
+        </p>
+
+        <p
+          id="accountStatusNote"
+          class="account-status-banner-note hidden"
+        ></p>
+      </div>
+    </section>
+    <!-- Notification Center: shared inbox for Admin messages and automatic queue updates. -->
+    <section id="notificationDropdown" class="notification-dropdown hidden" aria-label="Notifikasi terbaru">
+      <div class="notification-dropdown-header">
+        <div><h3 class="text-sm font-extrabold text-primary">Notifikasi</h3><p class="text-[10px] text-secondary mt-1">Pesan Admin dan pembaruan event</p></div>
+        <button type="button" id="btnCloseNotificationDropdown" class="text-tertiary hover:text-primary" aria-label="Tutup">✕</button>
+      </div>
+      <div id="notificationDropdownList" class="notification-list"><div class="notification-empty">Memuat notifikasi...</div></div>
+      <div class="notification-footer">
+        <button type="button" id="btnMarkAllNotificationsRead" class="notification-link-button">Tandai semua dibaca</button>
+        <button type="button" id="btnViewAllNotifications" class="notification-link-button">Lihat semua</button>
+      </div>
+    </section>
+
+    <div id="notificationModal" class="notification-modal hidden" role="dialog" aria-modal="true" aria-labelledby="notificationModalTitle">
+      <div class="notification-modal-card">
+        <div class="notification-modal-head">
+          <div><h3 id="notificationModalTitle" class="text-base font-extrabold text-primary">Notification Center</h3><p id="notificationModalSubtitle" class="text-[10px] text-secondary mt-1">Semua pesan dan pembaruan akun</p></div>
+          <button type="button" id="btnCloseNotificationModal" class="text-tertiary hover:text-primary" aria-label="Tutup">✕</button>
+        </div>
+        <div id="notificationFilterBar" class="notification-filters">
+          <button type="button" class="notification-filter active" data-notification-filter="all">Semua</button>
+          <button type="button" class="notification-filter" data-notification-filter="unread">Belum dibaca</button>
+          <button type="button" class="notification-filter" data-notification-filter="read">Sudah dibaca</button>
+        </div>
+        <div id="notificationModalList" class="notification-modal-list"><div class="notification-empty">Belum ada notifikasi.</div></div>
+        <div id="notificationDetail" class="notification-detail hidden"></div>
+      </div>
+    </div>
+    <div id="notificationToastStack" class="notification-toast-stack" aria-live="polite" aria-atomic="false"></div>
 
     <main class="flex-1 w-full max-w-[1536px] mx-auto p-4 md:px-8 space-y-6 mt-2">
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
@@ -676,9 +870,9 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc, query, where, onSnapshot, doc, setDoc, getDoc, getDocs, writeBatch, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, query, where, onSnapshot, doc, setDoc, getDoc, getDocs, writeBatch, runTransaction, serverTimestamp, orderBy, limit, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
-
+    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-functions.js";    
     const BLINKR_ROUTES = {
       home: "./index.html",
       photographer: "./blinkr_photographer.html",
@@ -746,7 +940,191 @@
     const db = getFirestore(app);
     const storage = getStorage(app);
     const provider = new GoogleAuthProvider();
+    const functions = getFunctions(app, "asia-southeast1");
+    const ensurePhotographerProfileCallable = httpsCallable(
+        functions,
+        "ensurePhotographerProfile"
+    );
+// =========================================================
+// PHOTOGRAPHER ACCOUNT STATUS
+// =========================================================
 
+let currentAccountStatus = "checking";
+let currentAccountStatusNote = "";
+let accountStatusLoaded = false;
+
+const VALID_ACCOUNT_STATUSES = new Set([
+  "active",
+  "suspended",
+  "blocked",
+  "soft_deleted"
+]);
+
+function resolveAccountStatus(profile) {
+   if (profile && profile.permanent_delete_requested === true) {
+    return "permanent_delete_pending";
+  }
+  // Akun lama tanpa field account_status tetap active.
+  if (
+    !Object.prototype.hasOwnProperty.call(
+      profile || {},
+      "account_status"
+    )
+  ) {
+    return "active";
+  }
+
+  const status = String(
+    profile.account_status ?? ""
+  ).trim().toLowerCase();
+
+  if (!status) return "active";
+
+  return VALID_ACCOUNT_STATUSES.has(status)
+    ? status
+    : "unknown";
+}
+
+function isAccountActive() {
+  // Fail-closed: fitur tidak aktif sebelum status akun berhasil diverifikasi.
+  return accountStatusLoaded && currentAccountStatus === "active";
+}
+
+function updateAccountStatusUI() {
+  const banner = document.getElementById("accountStatusBanner");
+  const title = document.getElementById("accountStatusTitle");
+  const description = document.getElementById("accountStatusDescription");
+  const note = document.getElementById("accountStatusNote");
+
+  const active = isAccountActive();
+
+  const messages = {
+    checking: {
+      tone: "info",
+      title: "Memeriksa status akun",
+      description: "Mohon tunggu sementara Blinkr memverifikasi akun kamu."
+    },
+
+    active: {
+      tone: "",
+      title: "",
+      description: ""
+    },
+
+    suspended: {
+      tone: "warning",
+      title: "Akun sedang ditangguhkan",
+      description:
+        "Akun kamu sedang ditangguhkan oleh Admin Blinkr. Kamu masih bisa melihat riwayat event dan menghubungi Support, tetapi belum bisa membuat event, menambahkan foto, atau mengubah profil."
+    },
+
+    blocked: {
+      tone: "danger",
+      title: "Akun telah diblokir",
+      description:
+        "Akun kamu diblokir oleh Admin Blinkr. Fitur pemrosesan, pengubahan profil, dan pengelolaan event sementara tidak tersedia. Hubungi Blinkr Support untuk informasi lebih lanjut."
+    },
+
+    soft_deleted: {
+      tone: "danger",
+      title: "Akun telah dihapus sementara",
+      description:
+        "Akun kamu sedang dalam status penghapusan sementara. Akses pengelolaan akun dan pemrosesan event dinonaktifkan. Hubungi Blinkr Support apabila ingin meminta pemulihan akun."
+    },
+
+    unknown: {
+      tone: "info",
+      title: "Status akun tidak dapat diverifikasi",
+      description:
+        "Untuk sementara fitur pengelolaan akun dinonaktifkan. Hubungi Blinkr Support agar status akun dapat diperiksa."
+    },
+    permanent_delete_pending: {
+      tone: "danger",
+      title: "Akun sedang dalam proses penghapusan permanen",
+      description:
+        "Akses Portal telah dinonaktifkan karena Admin Blinkr sedang memproses penghapusan permanen akun ini. Silakan keluar dari akun."
+    },
+  };
+
+  const state = !accountStatusLoaded
+    ? messages.checking
+    : (messages[currentAccountStatus] || messages.unknown);
+
+  banner.className = "account-status-banner";
+
+  if (!state.tone) {
+    banner.classList.add("hidden");
+  } else {
+    banner.classList.add(state.tone);
+    title.textContent = state.title;
+    description.textContent = state.description;
+    banner.classList.remove("hidden");
+  }
+
+  if (currentAccountStatusNote && !active) {
+    note.textContent = `Catatan Admin: ${currentAccountStatusNote}`;
+    note.classList.remove("hidden");
+  } else {
+    note.textContent = "";
+    note.classList.add("hidden");
+  }
+
+  // Tombol utama.
+  const eventButton = document.getElementById("btnOpenModal");
+  const topUpButton = document.getElementById("btnTopUpQuota");
+
+  if (eventButton) {
+    eventButton.disabled = !active;
+    eventButton.title = active
+      ? ""
+      : "Fitur ini tidak tersedia untuk status akun saat ini.";
+  }
+
+  if (topUpButton) {
+    topUpButton.disabled = !active;
+    topUpButton.title = active
+      ? ""
+      : "Top up tidak tersedia untuk status akun saat ini.";
+  }
+
+  // Profil tetap bisa dibuka untuk membaca informasi akun dan logout.
+  // Namun, perubahan profil hanya tersedia untuk akun active.
+  const profileFields = [
+    "editDisplayName",
+    "editWhatsApp",
+    "editInstagram",
+    "editProfilePhotoFile"
+  ];
+
+  profileFields.forEach(id => {
+    const element = document.getElementById(id);
+    if (element) element.disabled = !active;
+  });
+
+  [
+    "btnChooseProfilePhoto",
+    "btnResetProfilePhoto"
+  ].forEach(id => {
+    const button = document.getElementById(id);
+    if (button) button.disabled = !active;
+  });
+
+  const saveProfileButton = document.querySelector(
+    '#profileForm button[type="submit"]'
+  );
+
+  if (saveProfileButton) {
+    saveProfileButton.disabled = !active;
+    saveProfileButton.title = active
+      ? ""
+      : "Profil hanya dapat diubah jika akun active.";
+  }
+
+  // Perbarui tombol Edit, Tambah Foto, dan Hapus pada daftar event.
+  if (userEventsSnapshotLoaded) {
+    refreshVisibleUserEvents();
+  }
+}
     let currentCustomName = "";
     let currentCustomPhoto = "";
     let currentWhatsApp = "";
@@ -787,6 +1165,14 @@
     let pendingDeleteEventId = null;
     let deleteInProgress = false;
     let deleteToastTimer = null;
+    let notificationUnsubscribe = null;
+    let notificationItems = [];
+    let notificationToastQueue = [];
+    const activeNotificationToastIds = new Set();
+    const notificationToastTimers = new Map();
+    let notificationFilterMode = "all";
+    let currentNotificationDetailId = null;
+    let notificationUserId = null;
 
     function extractFolderId(url) {
       const match = url.match(/folders\/([a-zA-Z0-9_-]+)/);
@@ -949,7 +1335,13 @@
     }
 
     document.getElementById("btnOpenModal").addEventListener("click", () => {
-      if (!isMasterAccount && currentQuota <= 0) return alert("Kuota foto habis. Periksa saldo kuota harian atau kuota pembelian.");
+      if (!isAccountActive()) {
+        return alert("Akun kamu tidak aktif. Hubungi Blinkr Support untuk informasi lebih lanjut.");
+      }
+
+      if (!isMasterAccount && currentQuota <= 0) {
+        return alert("Kuota foto habis. Periksa saldo kuota harian atau kuota pembelian.");
+      }
       document.getElementById("eventModal").classList.remove("hidden");
     });
     // WHATSAPP MESSAGE HELPER. Pesan sengaja tanpa emoji agar aman di semua perangkat.
@@ -992,13 +1384,19 @@
       topUpModal.classList.add("hidden");
     }
 
-    document.getElementById("btnTopUpQuota").addEventListener("click", () => {
-      if (!auth.currentUser) {
-        alert("Silakan login terlebih dahulu.");
-        return;
-      }
-      topUpModal.classList.remove("hidden");
-    });
+  document.getElementById("btnTopUpQuota").addEventListener("click", () => {
+  if (!auth.currentUser) {
+    alert("Silakan login terlebih dahulu.");
+    return;
+  }
+
+  if (!isAccountActive()) {
+    alert("Top up tidak tersedia untuk status akun saat ini.");
+    return;
+  }
+
+  topUpModal.classList.remove("hidden");
+});
 
     document.getElementById("btnCloseTopUpModal").addEventListener("click", closeTopUpModal);
     document.getElementById("btnCancelTopUpModal").addEventListener("click", closeTopUpModal);
@@ -1013,39 +1411,51 @@
       return Number(value).toLocaleString("id-ID");
     }
 
-    function sendTopUpRequest(photoCount, price) {
-      if (!/^\d{8,15}$/.test(BLINKR_WHATSAPP_NUMBER)) {
-        alert("Nomor WhatsApp Blinkr belum diatur.");
-        return;
-      }
-      if (!auth.currentUser) {
-        alert("Silakan login terlebih dahulu.");
-        return;
-      }
+  function sendTopUpRequest(photoCount, price) {
+  if (!auth.currentUser) {
+    alert("Silakan login terlebih dahulu.");
+    return;
+  }
 
-      const photographerName = currentCustomName || auth.currentUser.displayName || "Photographer";
-      const photographerEmail = auth.currentUser.email || "-";
-      const message = [
-        "Halo tim Blinkr!",
-        "",
-        "Saya ingin melakukan top up kuota.",
-        "",
-        "*Detail Paket*",
-        `Kuota: ${formatTopUpNumber(photoCount)} foto`,
-        `Harga: Rp${formatTopUpNumber(price)}`,
-        "",
-        "*Data Fotografer*",
-        `Nama: ${photographerName}`,
-        `Email: ${photographerEmail}`,
-        "",
-        "Mohon kirimkan QRIS atau instruksi pembayaran untuk paket tersebut.",
-        "Saya memahami kuota akan ditambahkan setelah pembayaran diverifikasi.",
-        "",
-        "Terima kasih!"
-      ].join("\n");
-      closeTopUpModal();
-      openWhatsAppMessage(message);
-    }
+  if (!isAccountActive()) {
+    alert("Top up tidak tersedia untuk status akun saat ini.");
+    return;
+  }
+
+  if (!/^\d{8,15}$/.test(BLINKR_WHATSAPP_NUMBER)) {
+    alert("Nomor WhatsApp Blinkr belum diatur.");
+    return;
+  }
+
+  const photographerName =
+    currentCustomName ||
+    auth.currentUser.displayName ||
+    "Photographer";
+
+  const photographerEmail = auth.currentUser.email || "-";
+
+  const message = [
+    "Halo tim Blinkr!",
+    "",
+    "Saya ingin melakukan top up kuota.",
+    "",
+    "*Detail Paket*",
+    `Kuota: ${formatTopUpNumber(photoCount)} foto`,
+    `Harga: Rp${formatTopUpNumber(price)}`,
+    "",
+    "*Data Fotografer*",
+    `Nama: ${photographerName}`,
+    `Email: ${photographerEmail}`,
+    "",
+    "Mohon kirimkan QRIS atau instruksi pembayaran untuk paket tersebut.",
+    "Saya memahami kuota akan ditambahkan setelah pembayaran diverifikasi.",
+    "",
+    "Terima kasih!"
+  ].join("\n");
+
+  closeTopUpModal();
+  openWhatsAppMessage(message);
+}
 
     document.querySelectorAll("[data-topup-photos][data-topup-price]").forEach((button) => {
       button.addEventListener("click", () => {
@@ -1170,6 +1580,13 @@
     async function doEnsurePhotographerSlug() {
       const publicId = String(currentPublicId || "").trim();
       const user = auth.currentUser;
+      if (!isAccountActive()) {
+        return {
+          ok: false,
+          slug: currentPublicSlug,
+          base: currentSlugBase
+        };
+      }
       if (!publicId || !user) return { ok: true, slug: currentPublicSlug, base: currentSlugBase };
 
       const base = slugifyPhotographerName(currentCustomName || user.displayName || "Fotografer");
@@ -1212,6 +1629,9 @@
 
     async function syncPublicPhotographerProfile() {
       const publicId = String(currentPublicId || "").trim();
+      if (!isAccountActive()) {
+        return false;
+      }     
       if (!publicId || !auth.currentUser) return true;
 
       const slugResult = await ensurePhotographerSlug();
@@ -1458,6 +1878,35 @@
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
+        // Reset status sementara saat sesi pengguna dimulai.
+        currentAccountStatus = "checking";
+        currentAccountStatusNote = "";
+        accountStatusLoaded = false;
+        updateAccountStatusUI();
+        // Pemeriksaan server-side wajib dilakukan sebelum Portal membaca/membuat profil.
+        try {
+          await ensurePhotographerProfileCallable({
+            displayName: user.displayName || "",
+            photoURL: user.photoURL || ""
+          });
+        } catch (error) {
+          console.error("Akun tidak lolos pemeriksaan Permanent Delete:", error);
+          await signOut(auth).catch(() => {});
+
+          if (error && error.code === "functions/permission-denied") {
+            alert(
+              "Akun dengan email ini sudah pernah diminta untuk dihapus permanen dan tidak dapat mendaftar ulang ke Blinkr."
+            );
+          } else {
+            alert(
+              "Blinkr belum berhasil memverifikasi akun. Akses Portal dibatalkan sementara. Periksa koneksi lalu coba login kembali."
+            );
+          }
+          return;
+        }
+
+        // Abaikan callback lama bila user sudah berganti/logout selama callable berjalan.
+        if (!auth.currentUser || auth.currentUser.uid !== user.uid) return;
         const userDocRef = doc(db, "users", user.uid);
 
         // Batas FREE bersifat global. Dokumen ini hanya perlu dapat dibaca oleh user login.
@@ -1498,27 +1947,40 @@
             currentInstagram = data.instagram || "";
             currentPublicId = data.public_id || "";
           } else {
-            const initialProfile = {
-              custom_name: user.displayName,
-              photo_url: user.photoURL || "",
-              photo_storage_path: "",
-              whatsapp: "",
-              instagram: "",
-              email: user.email,
-              remaining_quota: 500,
-              role: "user",
-              updated_at: new Date()
-            };
-            await setDoc(userDocRef, initialProfile);
-            currentQuotaProfile = initialProfile;
-            currentCustomName = user.displayName;
-            currentCustomPhoto = user.photoURL || "";
-            currentPhotoStoragePath = "";
-            currentWhatsApp = "";
-            currentInstagram = "";
-            currentPublicId = "";
-          }
+              // Profil seharusnya sudah dibuat oleh ensurePhotographerProfile.
+              // Jangan membuat ulang users/{uid} dari browser karena callable
+              // adalah satu-satunya jalur create yang memeriksa email tombstone.
+            console.error(
+                "Profil users/{uid} hilang setelah bootstrap server-side:",
+                  user.uid
+              );
 
+              currentAccountStatus = "unknown";
+              currentAccountStatusNote = "";
+              accountStatusLoaded = true;
+              updateAccountStatusUI();
+
+              await signOut(auth).catch(() => {});
+
+            alert(
+                  "Profil Blinkr tidak ditemukan. Sesi telah dikeluarkan demi keamanan. Silakan login kembali atau hubungi Support."
+              );
+
+            return;
+          }
+          // Ambil status akun terbaru dari dokumen users/{uid}.
+          // Akun lama tanpa field account_status otomatis active.
+          currentAccountStatus = resolveAccountStatus(
+            currentQuotaProfile || {}
+          );
+
+          currentAccountStatusNote = String(
+            (currentQuotaProfile || {}).account_status_note || ""
+          );
+
+          accountStatusLoaded = true;
+
+          updateAccountStatusUI();
           await syncPublicPhotographerProfile();
 
           document.getElementById("userName").textContent = currentCustomName || "Photographer";
@@ -1526,6 +1988,11 @@
           document.getElementById("userAvatar").src = currentCustomPhoto || "https://via.placeholder.com/40";
           renderQuotaDisplay();
         }, (error) => {
+          currentAccountStatus = "unknown";
+          currentAccountStatusNote = "";
+          accountStatusLoaded = true;
+          updateAccountStatusUI();
+
           console.error("Failed to load user quota/profile:", error);
           document.getElementById("statQuota").textContent = "Unavailable";
           document.getElementById("quotaBreakdown").textContent = "Failed to load quota information.";
@@ -1533,6 +2000,7 @@
 
         document.getElementById("loginSection").classList.add("hidden");
         document.getElementById("adminSection").classList.remove("hidden");
+        subscribeNotificationInbox(user.uid);
         loadUserEvents(user.email);
       } else {
         document.getElementById("loginSection").classList.remove("hidden");
@@ -1540,6 +2008,18 @@
         if (unsubscribeSnapshot) unsubscribeSnapshot();
         if (userSnapshotUnsubscribe) userSnapshotUnsubscribe();
         if (globalQuotaSettingsUnsubscribe) globalQuotaSettingsUnsubscribe();
+        if (notificationUnsubscribe) notificationUnsubscribe();
+        notificationUnsubscribe = null;
+        notificationUserId = null;
+        notificationItems = [];
+        notificationToastQueue = [];
+        activeNotificationToastIds.clear();
+        notificationToastTimers.forEach(timer => clearTimeout(timer));
+        notificationToastTimers.clear();
+        document.getElementById("notificationToastStack").innerHTML = "";
+        document.getElementById("notificationDropdown").classList.add("hidden");
+        closeNotificationModal();
+        updateNotificationBadge();
         userSnapshotUnsubscribe = null;
         globalQuotaSettingsUnsubscribe = null;
         currentQuotaProfile = null;
@@ -1553,6 +2033,10 @@
         slugLoadedForPublicId = "";
         lastPublicProfileSyncSignature = "";
         renderClientLink();
+        currentAccountStatus = "checking";
+        currentAccountStatusNote = "";
+        accountStatusLoaded = false;
+        updateAccountStatusUI();
         currentQuota = 0;
         currentDailyFreeQuota = 0;
         currentPurchasedQuota = 0;
@@ -1576,7 +2060,13 @@
       const previousPhotoPath = currentPhotoStoragePath;
 
       try {
-        if (!auth.currentUser) throw new Error("Sesi login tidak tersedia. Silakan login ulang.");
+        if (!isAccountActive()) {
+          throw new Error("Akun kamu tidak aktif. Perubahan profil tidak diizinkan.");
+        }
+
+        if (!auth.currentUser) {
+          throw new Error("Sesi login tidak tersedia. Silakan login ulang.");
+        }
 
         const nName = document.getElementById("editDisplayName").value.trim();
         const nWhatsApp = normalizeWhatsAppInput(document.getElementById("editWhatsApp").value);
@@ -1668,27 +2158,53 @@
     document.getElementById("appendSourceType").addEventListener("change", updateAppendSourceFields);
     document.getElementById("btnCloseAppendModal").addEventListener("click", closeAppendModal);
     document.getElementById("btnCancelAppendModal").addEventListener("click", closeAppendModal);
-
     window.openAppendModal = (eventId) => {
-      const ev = userEventsById[eventId];
-      if (!ev || ev.status !== "Selesai") return alert("Foto hanya bisa ditambah setelah event selesai.");
-      appendSelectedEventId = eventId;
-      document.getElementById("appendEventTitle").textContent =
-  `${ev.event_name || "Event"} · ${formatDateDisplay(ev.event_date)}`;
-      const folderSelect = document.getElementById("appendExistingFolder");
-      const previousBatchFolders = (appendTasksByParent[eventId] || []).map(b => b.gdrive_folder_id).filter(Boolean);
-      const folderIds = [...new Set([ev.gdrive_folder_id, ...previousBatchFolders].filter(Boolean))];
-      folderSelect.innerHTML = "";
-      folderIds.forEach((fId, index) => {
-        const opt = document.createElement("option");
-        opt.value = fId;
-        opt.textContent = index === 0 ? "Main folder" : `Additional folder ${index}`;
-        folderSelect.appendChild(opt);
-      });
-      document.getElementById("appendSourceType").value = "existing_folder";
-      document.getElementById("appendModal").classList.remove("hidden");
-      updateAppendSourceFields();
-    };
+      // Pastikan akun masih aktif sebelum membuka fitur append.
+      if (!isAccountActive()) {
+      return alert("Akun kamu tidak aktif. Tidak dapat menambahkan foto.");
+      }
+
+  const ev = userEventsById[eventId];
+
+  if (!ev || ev.status !== "Selesai") {
+    return alert("Foto hanya bisa ditambah setelah event selesai.");
+  }
+
+  appendSelectedEventId = eventId;
+
+  document.getElementById("appendEventTitle").textContent =
+    `${ev.event_name || "Event"} · ${formatDateDisplay(ev.event_date)}`;
+
+  const folderSelect = document.getElementById("appendExistingFolder");
+
+  const previousBatchFolders = (
+    appendTasksByParent[eventId] || []
+  ).map(b => b.gdrive_folder_id).filter(Boolean);
+
+  const folderIds = [
+    ...new Set([
+      ev.gdrive_folder_id,
+      ...previousBatchFolders
+    ].filter(Boolean))
+  ];
+
+  folderSelect.innerHTML = "";
+
+  folderIds.forEach((fId, index) => {
+    const opt = document.createElement("option");
+    opt.value = fId;
+    opt.textContent = index === 0
+      ? "Main folder"
+      : `Additional folder ${index}`;
+
+    folderSelect.appendChild(opt);
+  });
+
+  document.getElementById("appendSourceType").value = "existing_folder";
+  document.getElementById("appendModal").classList.remove("hidden");
+
+  updateAppendSourceFields();
+};
 
     document.getElementById("appendForm").addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -1698,6 +2214,9 @@
       submitBtn.disabled = true;
       submitBtn.textContent = "Sending...";
       try {
+        if (!isAccountActive()) {
+          throw new Error("Akun kamu tidak aktif. Tidak dapat menambahkan foto.");
+        }
         const parentId = appendSelectedEventId;
         const sourceType = document.getElementById("appendSourceType").value;
         const folderId = sourceType === "existing_folder"
@@ -1732,7 +2251,14 @@
 
     document.getElementById("eventForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      if (!isMasterAccount && currentQuota <= 0) return alert("Kuota habis. Periksa saldo kuota harian atau kuota pembelian.");
+
+      if (!isAccountActive()) {
+        return alert("Akun kamu tidak aktif. Tidak dapat mengirim event.");
+      }
+
+      if (!isMasterAccount && currentQuota <= 0) {
+        return alert("Kuota habis. Periksa saldo kuota harian atau kuota pembelian.");
+      }
       const folderId = extractFolderId(document.getElementById("gdriveUrl").value.trim());
       if (!folderId) return alert("Link Drive tidak valid!");
 
@@ -1925,6 +2451,57 @@
       return ev.status === "Selesai" && !isEventLocked(ev);
     }
 
+    function hasNumericField(data, key) {
+      return data && Object.prototype.hasOwnProperty.call(data, key)
+        && data[key] !== null && data[key] !== "" && Number.isFinite(Number(data[key]));
+    }
+
+    function getPhotoSummary(eventData) {
+      const foundKnown = hasNumericField(eventData, "jumlah_foto_ditemukan");
+      const found = foundKnown ? nonNegativeNumber(eventData.jumlah_foto_ditemukan) : null;
+      const status = String(eventData.status || "Pending");
+      const terminal = ["Selesai", "Append_Selesai", "Gagal", "Gagal_Kuota_Habis"].includes(status);
+      let successful = null;
+
+      if (hasNumericField(eventData, "jumlah_hasil_tersimpan")) {
+        successful = nonNegativeNumber(eventData.jumlah_hasil_tersimpan);
+      } else if (
+        terminal && found !== null
+        && hasNumericField(eventData, "jumlah_foto_belum_berhasil")
+        && hasNumericField(eventData, "jumlah_foto_dibatasi_kuota")
+      ) {
+        // Backward-compatible calculation for older queue docs that have the
+        // two completion counters but predate jumlah_hasil_tersimpan.
+        successful = Math.max(
+          0,
+          found
+            - nonNegativeNumber(eventData.jumlah_foto_belum_berhasil)
+            - nonNegativeNumber(eventData.jumlah_foto_dibatasi_kuota)
+        );
+      } else if (terminal && found === 0) {
+        successful = 0;
+      }
+
+      const unsuccessful = terminal && found !== null && successful !== null
+        ? Math.max(0, found - successful)
+        : null;
+      return { found, foundKnown, successful, unsuccessful, terminal };
+    }
+
+    function renderPhotoSummary(eventData) {
+      const summary = getPhotoSummary(eventData);
+      const fmt = value => value === null ? "—" : formatQuota(value);
+      const notReady = !summary.terminal
+        ? `<div class="photo-summary-pending">${String(eventData.status || "Pending") === "Diproses" ? "Hasil sedang diperbarui" : "Menunggu pemrosesan selesai"}</div>`
+        : (!summary.foundKnown && summary.found === null ? `<div class="photo-summary-pending">Data ringkasan belum tersedia</div>` : "");
+      return `
+        <div class="photo-summary-grid" aria-label="Ringkasan foto event">
+          <div class="photo-summary-item"><span class="photo-summary-value">${fmt(summary.found)}</span><span class="photo-summary-label">Ditemukan</span></div>
+          <div class="photo-summary-item success"><span class="photo-summary-value">${fmt(summary.successful)}</span><span class="photo-summary-label">Berhasil</span></div>
+          <div class="photo-summary-item failed"><span class="photo-summary-value">${fmt(summary.unsuccessful)}</span><span class="photo-summary-label">Tidak berhasil</span></div>
+        </div>${notReady}`;
+    }
+
     function renderEventTable(eventDocs) {
       const tableBody = document.getElementById("eventListTable");
       if (!eventDocs || eventDocs.length === 0) {
@@ -1975,29 +2552,32 @@
           const hasActiveAppendBatch = relatedBatches.some(batch =>
             !["Append_Selesai", "Gagal"].includes(String(batch.status || ""))
           );
-          const canDeleteEvent = ev.status !== "Diproses"
+          const canDeleteEvent = isAccountActive()
+            && ev.status !== "Diproses"
             && !String(ev.append_lock_batch_id || "").trim()
             && !hasActiveAppendBatch;
           const deleteButton = canDeleteEvent
             ? `<button onclick="window.openDeleteModal('${escapeHtml(ev.id)}')" class="text-danger text-xs font-semibold">Hapus</button>`
-            : `<button disabled title="Event atau batch tambahan masih diproses" class="text-tertiary text-xs cursor-not-allowed">Hapus</button>`;
+            : `<button disabled title="${isAccountActive() ? "Event atau batch tambahan masih diproses" : "Akun tidak aktif"}" class="text-tertiary text-xs cursor-not-allowed">Hapus</button>`;
           const jsonName = ev.json_filename ? String(ev.json_filename).split(/[\\/]/).pop() : "-";
           const statusText = String(ev.status || "Pending");
           const badge = isDone
             ? `<span class="text-success font-semibold">Selesai</span>`
             : `<span class="text-warning font-semibold">${escapeHtml(statusText)}</span>`;
           const addButton = isDone
-            ? `<button onclick="window.openAppendModal('${escapeHtml(ev.id)}')" class="text-info hover:text-primary transition text-xs font-semibold whitespace-nowrap">+ Tambah Foto</button>`
+            ? (isAccountActive()
+                ? `<button onclick="window.openAppendModal('${escapeHtml(ev.id)}')" class="text-info hover:text-primary transition text-xs font-semibold whitespace-nowrap">+ Tambah Foto</button>`
+                : `<button disabled title="Akun tidak aktif" class="text-tertiary text-xs cursor-not-allowed whitespace-nowrap">+ Tambah Foto</button>`)
             : "";
-          const editButton = !canEditEventName(ev)
-            ? `<button disabled title="Nama event bisa diubah setelah event selesai diproses" class="text-tertiary text-xs cursor-not-allowed">Edit</button>`
+          const editButton = !isAccountActive() || !canEditEventName(ev)
+            ? `<button disabled title="${isAccountActive() ? "Nama event bisa diubah setelah event selesai diproses" : "Akun tidak aktif"}" class="text-tertiary text-xs cursor-not-allowed">Edit</button>`
             : `<button onclick="window.openEditEventModal('${escapeHtml(ev.id)}')" class="text-primary text-xs font-semibold hover:underline">Edit</button>`;
           html += `
             <tr class="table-row align-middle">
               <td class="py-4 px-5 text-primary font-semibold">${escapeHtml(ev.event_name)}</td>
               <td class="py-4 px-5 text-secondary whitespace-nowrap">${escapeHtml(formatDateDisplay(ev.event_date))}</td>
               <td class="py-4 px-5">${badge}</td>
-              <td class="py-4 px-5 text-xs whitespace-nowrap">${Number(ev.jumlah_foto_ditemukan) || 0} Photos</td>
+              <td class="py-4 px-5 text-xs">${renderPhotoSummary(ev)}</td>
               <td class="py-4 px-5 text-tertiary font-mono text-xs">${escapeHtml(jsonName)}</td>
               <td class="py-4 px-5">
                 <div class="flex items-center justify-end gap-4 whitespace-nowrap">
@@ -2037,6 +2617,368 @@ document.getElementById("sortCountBtn").addEventListener("click", () => {
   renderEventTable(currentEventDocs);
 });
 
+    // =========================================================
+    // NOTIFICATION CENTER
+    // Inbox path: users/{uid}/notifications/{notificationId}
+    // Toast close never marks a message as read.
+    // =========================================================
+    function notificationTimestamp(value) {
+      if (!value) return 0;
+      if (typeof value.toMillis === "function") return value.toMillis();
+      if (value instanceof Date) return value.getTime();
+      const parsed = new Date(value).getTime();
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+
+    function formatNotificationTime(value) {
+      const ms = notificationTimestamp(value);
+      if (!ms) return "Waktu tidak tersedia";
+      return new Intl.DateTimeFormat("id-ID", {
+        day: "numeric", month: "short", year: "numeric",
+        hour: "2-digit", minute: "2-digit"
+      }).format(new Date(ms));
+    }
+
+    function isNotificationExpired(item) {
+      const expiry = notificationTimestamp(item.expires_at);
+      return expiry > 0 && expiry <= Date.now();
+    }
+
+    function getActiveNotifications() {
+      return notificationItems.filter(item => !isNotificationExpired(item));
+    }
+
+    function getUnreadNotifications() {
+      return getActiveNotifications().filter(item => !item.read_at);
+    }
+
+    // Purchase notifications are displayed as separate details instead of one dense paragraph.
+    function getNotificationBodyPresentation(item) {
+      const rawBody = String(item?.body || "").replace(/\r\n?/g, "\n").trim();
+      const searchable = `${String(item?.title || "")} ${rawBody}`;
+      const normalized = rawBody.replace(/\s+/g, " ").trim();
+      const isQuotaPurchase = /pembelian\s+kuota/i.test(searchable)
+        && /Paket:\s*/i.test(normalized)
+        && /Kuota ditambahkan:\s*/i.test(normalized)
+        && /Nominal pembayaran:\s*/i.test(normalized);
+
+      if (!isQuotaPurchase) {
+        return {
+          compact: rawBody,
+          toast: rawBody,
+          detailHtml: escapeHtml(rawBody),
+        };
+      }
+
+      const greetingMatch = normalized.match(/Halo\s+(.+?)!/i);
+      const packageMatch = normalized.match(/Paket:\s*(.+?)\s+Kuota ditambahkan:/i);
+      const quotaMatch = normalized.match(/Kuota ditambahkan:\s*(.+?)\s+Nominal pembayaran:/i);
+      const amountMatch = normalized.match(/Nominal pembayaran:\s*(.+?)(?=\s+Kuota tersebut sudah ditambahkan|\s+Terima kasih|$)/i);
+      const readyMatch = normalized.match(/Kuota tersebut sudah ditambahkan ke saldo Purchased akun kamu dan siap digunakan\.?/i);
+      const introMatch = normalized.match(/Informasi pembelian kuota Blinkr kamu sudah diperbarui oleh admin\.?/i);
+      const thanksMatch = normalized.match(/Terima kasih telah menggunakan Blinkr!?/i);
+
+      const greeting = greetingMatch ? `Halo ${greetingMatch[1].trim()}!` : "Informasi pembelian kuota berhasil diperbarui.";
+      const intro = introMatch ? introMatch[0] : "Informasi pembelian kuota Blinkr kamu sudah diperbarui oleh admin.";
+      const packageName = packageMatch ? packageMatch[1].trim() : "—";
+      const quota = quotaMatch ? quotaMatch[1].trim() : "—";
+      const amount = amountMatch ? amountMatch[1].trim() : "—";
+      const ready = readyMatch ? readyMatch[0] : "Kuota sudah ditambahkan ke saldo Purchased akun kamu dan siap digunakan.";
+      const thanks = thanksMatch ? thanksMatch[0] : "Terima kasih telah menggunakan Blinkr!";
+
+      const compact = `${packageName} · +${quota} · ${amount}. Kuota siap digunakan.`;
+      const detailHtml = `
+        <p class="notification-body-paragraph">${escapeHtml(greeting)}</p>
+        <p class="notification-body-paragraph">${escapeHtml(intro)}</p>
+        <section class="notification-purchase-details" aria-label="Detail pembelian kuota">
+          <div class="notification-purchase-heading">Rincian pembelian</div>
+          <div class="notification-purchase-row"><span class="notification-purchase-label">Paket</span><strong class="notification-purchase-value">${escapeHtml(packageName)}</strong></div>
+          <div class="notification-purchase-row"><span class="notification-purchase-label">Kuota ditambahkan</span><strong class="notification-purchase-value">${escapeHtml(quota)}</strong></div>
+          <div class="notification-purchase-row"><span class="notification-purchase-label">Nominal pembayaran</span><strong class="notification-purchase-value">${escapeHtml(amount)}</strong></div>
+        </section>
+        <p class="notification-body-paragraph">${escapeHtml(ready)}</p>
+        <p class="notification-body-paragraph">${escapeHtml(thanks)}</p>`;
+
+      return { compact, toast: compact, detailHtml };
+    }
+
+    function updateNotificationBadge() {
+      const badge = document.getElementById("notificationUnreadCount");
+      if (!badge) return;
+      const count = getUnreadNotifications().length;
+      badge.textContent = count > 99 ? "99+" : String(count);
+      badge.classList.toggle("hidden", count === 0);
+      const bell = document.getElementById("notificationBellBtn");
+      if (bell) bell.setAttribute("aria-label", count ? `Notifikasi, ${count} belum dibaca` : "Buka notifikasi");
+    }
+
+    function notificationItemMarkup(item) {
+      const unread = !item.read_at;
+      const title = escapeHtml(item.title || "Notifikasi Blinkr");
+      const body = escapeHtml(getNotificationBodyPresentation(item).compact);
+      const typeLabel = item.source_type === "queue_status" ? "PEMBARUAN EVENT" : "PESAN BLINKR";
+      return `
+        <button type="button" class="notification-item ${unread ? "unread" : ""}" data-notification-id="${escapeHtml(item.id)}">
+          <span class="notification-item-dot ${unread ? "" : "read"}"></span>
+          <span class="min-w-0 flex-1">
+            <span class="notification-item-title">${title}</span>
+            <span class="notification-item-body">${body}</span>
+            <span class="notification-item-time">${typeLabel} · ${escapeHtml(formatNotificationTime(item.created_at || item.sent_at))}</span>
+          </span>
+        </button>`;
+    }
+
+    function renderNotificationDropdown() {
+      const list = document.getElementById("notificationDropdownList");
+      if (!list) return;
+      const active = getActiveNotifications().slice(0, 6);
+      list.innerHTML = active.length
+        ? active.map(notificationItemMarkup).join("")
+        : `<div class="notification-empty">Belum ada notifikasi baru.</div>`;
+      list.querySelectorAll("[data-notification-id]").forEach(button => {
+        button.addEventListener("click", () => openNotificationDetail(button.dataset.notificationId));
+      });
+      updateNotificationBadge();
+    }
+
+    function renderNotificationModalList() {
+      const list = document.getElementById("notificationModalList");
+      const detail = document.getElementById("notificationDetail");
+      if (!list || !detail || !document.getElementById("notificationModal").classList.contains("hidden")) return;
+      if (currentNotificationDetailId && !detail.classList.contains("hidden")) return;
+      detail.classList.add("hidden");
+      list.classList.remove("hidden");
+      const active = getActiveNotifications();
+      const filtered = active.filter(item => {
+        if (notificationFilterMode === "unread") return !item.read_at;
+        if (notificationFilterMode === "read") return Boolean(item.read_at);
+        return true;
+      });
+      list.innerHTML = filtered.length
+        ? filtered.map(notificationItemMarkup).join("")
+        : `<div class="notification-empty">${notificationFilterMode === "unread" ? "Tidak ada pesan yang belum dibaca." : notificationFilterMode === "read" ? "Belum ada pesan yang dibaca." : "Belum ada notifikasi."}</div>`;
+      list.querySelectorAll("[data-notification-id]").forEach(button => {
+        button.addEventListener("click", () => openNotificationDetail(button.dataset.notificationId));
+      });
+    }
+
+    function openNotificationDetail(notificationId) {
+      const item = getActiveNotifications().find(entry => entry.id === notificationId);
+      if (!item) return;
+      document.getElementById("notificationDropdown").classList.add("hidden");
+      document.getElementById("notificationBellBtn").setAttribute("aria-expanded", "false");
+      document.getElementById("notificationModal").classList.remove("hidden");
+      document.getElementById("notificationModalTitle").textContent = item.title || "Notifikasi Blinkr";
+      document.getElementById("notificationModalSubtitle").textContent = `${item.category || "information"} · ${formatNotificationTime(item.created_at || item.sent_at)}`;
+      const detail = document.getElementById("notificationDetail");
+      const bodyPresentation = getNotificationBodyPresentation(item);
+      const rawActionUrl = String(item.action_url || "").trim();
+      const actionUrl = /^https?:\/\//i.test(rawActionUrl) ? rawActionUrl : "";
+      detail.innerHTML = `
+        <div class="text-[10px] uppercase tracking-wider font-bold text-secondary">${escapeHtml(item.sender || "Blinkr")}</div>
+        <div class="notification-detail-body">${bodyPresentation.detailHtml || "Tidak ada isi pesan."}</div>
+        ${actionUrl ? `<a class="notification-detail-action" href="${escapeHtml(actionUrl)}" target="_blank" rel="noopener noreferrer">Buka tautan</a>` : ""}
+        <div class="mt-6"><button type="button" id="btnBackToNotificationList" class="btn-secondary px-4 py-2 rounded-lg text-xs font-semibold">← Kembali ke daftar</button></div>`;
+      document.getElementById("notificationModalList").classList.add("hidden");
+      detail.classList.remove("hidden");
+      currentNotificationDetailId = notificationId;
+      if (!item.read_at) markNotificationRead(item);
+      const backButton = document.getElementById("btnBackToNotificationList");
+      if (backButton) backButton.addEventListener("click", () => {
+        currentNotificationDetailId = null;
+        document.getElementById("notificationModalTitle").textContent = "Notification Center";
+        document.getElementById("notificationModalSubtitle").textContent = "Semua pesan dan pembaruan akun";
+        renderNotificationModalList();
+      });
+    }
+
+    async function markNotificationRead(item) {
+      if (!notificationUserId || item.read_at) return;
+      try {
+        await updateDoc(doc(db, "users", notificationUserId, "notifications", item.id), {
+          read_at: serverTimestamp()
+        });
+      } catch (error) {
+        console.warn("Tidak dapat memperbarui status baca notifikasi:", error);
+      }
+    }
+
+    async function markAllNotificationsRead() {
+      if (!notificationUserId) return;
+      const unread = getUnreadNotifications().slice(0, 450);
+      if (!unread.length) return;
+      try {
+        const batch = writeBatch(db);
+        unread.forEach(item => batch.update(
+          doc(db, "users", notificationUserId, "notifications", item.id),
+          { read_at: serverTimestamp() }
+        ));
+        await batch.commit();
+      } catch (error) {
+        console.error("Gagal menandai semua notifikasi sebagai dibaca:", error);
+        alert("Belum berhasil memperbarui status notifikasi. Silakan coba lagi.");
+      }
+    }
+
+    function removeNotificationToast(notificationId) {
+      const toast = document.querySelector(`[data-toast-notification-id="${CSS.escape(notificationId)}"]`);
+      if (toast) {
+        toast.classList.remove("show");
+        setTimeout(() => toast.remove(), 240);
+      }
+      const timer = notificationToastTimers.get(notificationId);
+      if (timer) clearTimeout(timer);
+      notificationToastTimers.delete(notificationId);
+      activeNotificationToastIds.delete(notificationId);
+      renderNextNotificationToasts();
+    }
+
+    function showNotificationToast(item) {
+      if (!item || activeNotificationToastIds.has(item.id)) return;
+      const stack = document.getElementById("notificationToastStack");
+      if (!stack || stack.children.length >= 3) return false;
+      activeNotificationToastIds.add(item.id);
+      const priority = String(item.priority || "normal").toLowerCase();
+      const bodyPresentation = getNotificationBodyPresentation(item);
+      const toast = document.createElement("div");
+      toast.className = `notification-toast ${["important", "critical"].includes(priority) ? priority : ""}`;
+      toast.dataset.toastNotificationId = item.id;
+      toast.innerHTML = `
+        <div class="notification-toast-content" role="button" tabindex="0">
+          <div class="notification-toast-title">${escapeHtml(item.title || "Notifikasi Blinkr")}</div>
+          <div class="notification-toast-body">${escapeHtml(bodyPresentation.toast)}</div>
+        </div>
+        <button type="button" class="notification-toast-close" aria-label="Tutup notifikasi">✕</button>`;
+      stack.appendChild(toast);
+      requestAnimationFrame(() => toast.classList.add("show"));
+      const open = () => openNotificationDetail(item.id);
+      const content = toast.querySelector(".notification-toast-content");
+      content.addEventListener("click", open);
+      content.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") { event.preventDefault(); open(); }
+      });
+      toast.querySelector(".notification-toast-close").addEventListener("click", () => removeNotificationToast(item.id));
+
+      // Mark as toast-shown only after the toast has been inserted into the UI.
+      if (notificationUserId && !item.toast_shown_at) {
+        updateDoc(doc(db, "users", notificationUserId, "notifications", item.id), {
+          toast_shown_at: serverTimestamp()
+        }).catch(error => console.warn("Gagal menyimpan toast_shown_at:", error));
+      }
+      if (priority !== "critical") {
+        const duration = priority === "important" ? 12000 : 7000;
+        notificationToastTimers.set(item.id, setTimeout(() => removeNotificationToast(item.id), duration));
+      }
+      return true;
+    }
+
+    function renderNextNotificationToasts() {
+      const stack = document.getElementById("notificationToastStack");
+      if (!stack) return;
+      while (stack.children.length < 3 && notificationToastQueue.length) {
+        const next = notificationToastQueue.shift();
+        if (!next || next.read_at || isNotificationExpired(next) || next.toast_shown_at) continue;
+        showNotificationToast(next);
+      }
+    }
+
+    function enqueuePendingNotificationToasts(items) {
+      const pending = items.filter(item =>
+        !item.read_at && !item.toast_shown_at && !isNotificationExpired(item)
+        && !activeNotificationToastIds.has(item.id)
+      ).sort((a, b) => notificationTimestamp(a.created_at || a.sent_at) - notificationTimestamp(b.created_at || b.sent_at));
+      const pendingById = new Map(pending.map(item => [item.id, item]));
+      // Reconcile queued items with the latest snapshot so a toast already
+      // shown/read on another tab or device is not displayed again here.
+      notificationToastQueue = notificationToastQueue
+        .filter(item => pendingById.has(item.id))
+        .map(item => pendingById.get(item.id));
+      const queuedIds = new Set(notificationToastQueue.map(item => item.id));
+      pending.forEach(item => { if (!queuedIds.has(item.id)) notificationToastQueue.push(item); });
+      renderNextNotificationToasts();
+    }
+
+    function subscribeNotificationInbox(uid) {
+      if (notificationUnsubscribe) notificationUnsubscribe();
+      notificationUserId = uid;
+      notificationItems = [];
+      notificationToastQueue = [];
+      activeNotificationToastIds.clear();
+      notificationToastTimers.forEach(timer => clearTimeout(timer));
+      notificationToastTimers.clear();
+      document.getElementById("notificationToastStack").innerHTML = "";
+      notificationUnsubscribe = onSnapshot(
+        query(collection(db, "users", uid, "notifications"), orderBy("created_at", "desc"), limit(100)),
+        snapshot => {
+          notificationItems = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+          renderNotificationDropdown();
+          renderNotificationModalList();
+          enqueuePendingNotificationToasts(notificationItems.slice());
+        },
+        error => {
+          console.error("Gagal memuat Notification Center:", error);
+          document.getElementById("notificationDropdownList").innerHTML = `<div class="notification-empty">Notifikasi belum dapat dimuat. Periksa koneksi lalu coba lagi.</div>`;
+        }
+      );
+    }
+
+    function closeNotificationModal() {
+      document.getElementById("notificationModal").classList.add("hidden");
+      currentNotificationDetailId = null;
+      document.getElementById("notificationModalTitle").textContent = "Notification Center";
+      document.getElementById("notificationModalSubtitle").textContent = "Semua pesan dan pembaruan akun";
+      document.getElementById("notificationDetail").classList.add("hidden");
+      document.getElementById("notificationModalList").classList.remove("hidden");
+    }
+
+    document.getElementById("notificationBellBtn").addEventListener("click", () => {
+      const dropdown = document.getElementById("notificationDropdown");
+      const willOpen = dropdown.classList.contains("hidden");
+      dropdown.classList.toggle("hidden", !willOpen);
+      document.getElementById("notificationBellBtn").setAttribute("aria-expanded", String(willOpen));
+      if (willOpen) renderNotificationDropdown();
+    });
+    document.getElementById("btnCloseNotificationDropdown").addEventListener("click", () => {
+      document.getElementById("notificationDropdown").classList.add("hidden");
+      document.getElementById("notificationBellBtn").setAttribute("aria-expanded", "false");
+    });
+    document.addEventListener("click", event => {
+      const dropdown = document.getElementById("notificationDropdown");
+      const bell = document.getElementById("notificationBellBtn");
+      if (!dropdown.classList.contains("hidden") && !dropdown.contains(event.target) && !bell.contains(event.target)) {
+        dropdown.classList.add("hidden");
+        bell.setAttribute("aria-expanded", "false");
+      }
+    });
+    document.getElementById("btnViewAllNotifications").addEventListener("click", () => {
+      document.getElementById("notificationDropdown").classList.add("hidden");
+      document.getElementById("notificationBellBtn").setAttribute("aria-expanded", "false");
+      document.getElementById("notificationModal").classList.remove("hidden");
+      document.getElementById("notificationModalTitle").textContent = "Notification Center";
+      document.getElementById("notificationModalSubtitle").textContent = "Semua pesan dan pembaruan akun";
+      notificationFilterMode = "all";
+      document.querySelectorAll("[data-notification-filter]").forEach(button => button.classList.toggle("active", button.dataset.notificationFilter === "all"));
+      renderNotificationModalList();
+    });
+    document.getElementById("btnMarkAllNotificationsRead").addEventListener("click", markAllNotificationsRead);
+    document.getElementById("btnCloseNotificationModal").addEventListener("click", closeNotificationModal);
+    document.getElementById("notificationModal").addEventListener("click", event => {
+      if (event.target.id === "notificationModal") closeNotificationModal();
+    });
+    document.querySelectorAll("[data-notification-filter]").forEach(button => {
+      button.addEventListener("click", () => {
+        notificationFilterMode = button.dataset.notificationFilter;
+        document.querySelectorAll("[data-notification-filter]").forEach(item => item.classList.toggle("active", item === button));
+        renderNotificationModalList();
+      });
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        document.getElementById("notificationDropdown").classList.add("hidden");
+        if (!document.getElementById("notificationModal").classList.contains("hidden")) closeNotificationModal();
+      }
+    });
+
     function loadUserEvents(email) {
       if (unsubscribeSnapshot) unsubscribeSnapshot();
       unsubscribeSnapshot = onSnapshot(query(collection(db, "queues"), where("photographer_email", "==", email)), (snapshot) => {
@@ -2061,6 +3003,9 @@ document.getElementById("sortCountBtn").addEventListener("click", () => {
 
     // Branded delete dialog: open first, delete only after explicit confirmation
     window.openDeleteModal = (docId) => {
+      if (!isAccountActive()) {
+        return alert("Akun kamu tidak aktif. Tidak dapat menghapus event.");
+      }
       const eventData = userEventsById[docId];
       if (!eventData) return;
       const relatedBatches = appendTasksByParent[docId] || [];
@@ -2123,6 +3068,9 @@ document.getElementById("sortCountBtn").addEventListener("click", () => {
       errorBox.classList.add("hidden");
 
       try {
+        if (!isAccountActive()) {
+          throw new Error("Akun tidak aktif. Penghapusan event tidak diizinkan.");
+        }
         const parentRef = doc(db, "queues", docId);
         const parentSnap = await getDoc(parentRef);
         if (!parentSnap.exists()) throw new Error("Event sudah tidak ditemukan.");
@@ -2220,6 +3168,9 @@ document.getElementById("sortCountBtn").addEventListener("click", () => {
     }
 
     window.openEditEventModal = (docId) => {
+      if (!isAccountActive()) {
+        return alert("Akun kamu tidak aktif. Tidak dapat mengubah nama event.");
+      }
       const ev = userEventsById[docId];
       if (!ev) return;
       if (!canEditEventName(ev)) {
@@ -2286,7 +3237,13 @@ document.getElementById("sortCountBtn").addEventListener("click", () => {
       saveBtn.textContent = "Saving...";
 
       try {
-        if (!auth.currentUser || !auth.currentUser.email) throw new Error("Sesi login tidak tersedia. Silakan login ulang.");
+        if (!isAccountActive()) {
+          throw new Error("Akun tidak aktif. Perubahan nama event tidak diizinkan.");
+        }
+
+        if (!auth.currentUser || !auth.currentUser.email) {
+          throw new Error("Sesi login tidak tersedia. Silakan login ulang.");
+        }
         const parentRef = doc(db, "queues", docId);
         const parentSnap = await getDoc(parentRef);
         if (!parentSnap.exists()) throw new Error("Event sudah tidak ditemukan.");
